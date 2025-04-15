@@ -1,0 +1,24 @@
+Modele uma classe chamada Cofre_Eletronico que simula um cofre com senha.
+Utilize um construtor para definir os estados iniciais do cofre, 
+como: senha, estado (aberto ou fechado) e tentativas_restantes (padrão de 3 tentativas).
+
+Implemente os seguintes comportamentos:
+
+abrir_cofre(senha): verifica se a senha está correta e muda o estado do cofre para "aberto".
+Diminui uma tentativa a cada senha errada.
+
+fechar_cofre(): muda o estado do cofre para "fechado".
+
+resetar_tentativas(): reseta o número de tentativas para 3, 
+mas só pode ser chamado se o cofre estiver aberto.
+
+trocar_senha(senha_antiga, nova_senha): permite mudar a senha apenas se a senha antiga for 
+correta e o cofre estiver aberto.
+
+Crie dois objetos da classe Cofre_Eletronico, simule o uso de seus métodos e imprima os estados antes e depois das operações.
+
+Requisitos:
+
+O construtor deve inicializar todos os atributos mencionados.
+
+Utilize métodos para modificar os atributos, respeitando as regras do problema.
