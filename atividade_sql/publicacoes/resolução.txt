@@ -1,0 +1,213 @@
+a) Livros que possuam preços entre R$ 100,00 e R$ 200,00.
+#USANDO OPERADORES
+SELECT titulo, preco 
+FROM livro 
+WHERE preco >= 100 AND preco <= 200;
+#)USANDO BETWEEN
+SELECT titulo, preco 
+FROM livro 
+WHERE preco BETWEEN 100 AND 200;
++-------------------+--------+
+| titulo            | preco  |
++-------------------+--------+
+| Python para Todos | 120.50 |
++-------------------+--------+
+
+b) Livros cujos títulos possuam a palavra ‘python’.
+SELECT titulo AS Titulos_com_python
+FROM livro
+WHERE LOWER(titulo) LIKE '%python%';
++--------------------+
+| Titulos_com_python |
++--------------------+
+| Python para Todos  |
++--------------------+
+
+
+c) Livros que foram lançados há mais de 5 anos.
+SELECT titulo, data_lancamento
+FROM livro
+WHERE data_lancamento < CURDATE() - INTERVAL 5 YEAR;
++---------------------+-----------------+
+| titulo              | data_lancamento |
++---------------------+-----------------+
+| Amor e Guerra       | 2018-03-10      |
+| História do Brasil  | 2019-05-15      |
++---------------------+-----------------+
+
+d) Quantidade total de livros.
+SELECT COUNT(*) AS 'QUANTIDADE DE LIVROS'
+FROM livro;
++----------------------+
+| QUANTIDADE DE LIVROS |
++----------------------+
+|                    5 |
++----------------------+
+
+e) Soma total dos preços dos livros.
+SELECT SUM(preco) AS 'SOMA TOTAL LIVROS'
+FROM livro;
++-------------------+
+| SOMA TOTAL LIVROS |
++-------------------+
+|            387.69 |
++-------------------+
+
+f) Maior preço dos livros.
+SELECT MAX(preco) AS 'livro mais caro'
+FROM livro;
++-----------------+
+| livro mais caro |
++-----------------+
+|          120.50 |
++-----------------+
+
+g) Quantidade de livros para cada assunto
+SELECT a.descricao, COUNT(*) AS quantidade
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+GROUP BY (a.descricao);
++----------------------+------------+
+| descricao            | quantidade |
++----------------------+------------+
+| Ficção Científica    |          1 |
+| Romance              |          1 |
+| História             |          1 |
+| Tecnologia           |          1 |
+| Filosofia            |          1 |
++----------------------+------------+
+
+h) Assuntos cujo preço médio dos livros ultrapassa R$ 50,00.
+
+SELECT a.descricao, AVG(preco) AS 'preço médio'
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+GROUP BY a.descricao
+HAVING AVG(preco) > 50;
++----------------------+---------------+
+| descricao            | preço médio   |
++----------------------+---------------+
+| Ficção Científica    |     59.900000 |
+| História             |     89.990000 |
+| Tecnologia           |    120.500000 |
+| Filosofia            |     72.300000 |
++----------------------+---------------+
+
+i) Assuntos que possuem pelo menos 2 livros.
+SELECT assunto.descricao, COUNT(*) AS quantidade
+FROM livro
+JOIN assunto ON livro.assunto_codigo = assunto.codigo
+GROUP BY assunto.descricao
+HAVING COUNT(*) >= 2;
+
+j) Nome e CPF dos autores que nasceram após 1° de janeiro de 1970.
+SELECT nome, cpf, data_nascimento
+FROM autor
+WHERE data_nascimento > '1970-01-01';
++---------------+-------------+-----------------+
+| nome          | cpf         | data_nascimento |
++---------------+-------------+-----------------+
+| João Silva    | 11111111111 | 1980-05-21      |
+| Maria Santos  | 22222222222 | 1975-11-02      |
+| Carlos Souza  | 33333333333 | 1990-07-14      |
+| Ana Pereira   | 44444444444 | 1988-03-30      |
+| Lúcia Tanaka  | 55555555555 | 1995-12-25      |
++---------------+-------------+-----------------+
+
+k) Nome e CPF dos autores que não são brasileiros.
+SELECT nome, cpf, n.descricao
+FROM autor a
+JOIN nacionalidade n ON n.codigo = a.nacionalidade_codigo
+WHERE LOWER(n.descricao) NOT LIKE '%brasileira%'
+  AND LOWER(n.descricao) NOT LIKE '%brasileiro%';
++---------------+-------------+---------------+
+| nome          | cpf         | descricao     |
++---------------+-------------+---------------+
+| Maria Santos  | 22222222222 | Portuguesa    |
+| Ana Pereira   | 44444444444 | Estadunidense |
+| Lúcia Tanaka  | 55555555555 | Japonesa      |
++---------------+-------------+---------------+
+
+l) Listagem dos livros contendo título, assunto e preço, ordenada em ordem crescente por
+assunto.
+
+SELECT titulo, a.descricao, preco
+FROM livro
+JOIN assunto a ON livro.assunto_codigo = a.codigo
+ORDER BY a.descricao;
++----------------------+----------------------+--------+
+| titulo               | descricao            | preco  |
++----------------------+----------------------+--------+
+| O Futuro Hoje        | Ficção Científica    |  59.90 |
+| Pensamentos Modernos | Filosofia            |  72.30 |
+| História do Brasil   | História             |  89.99 |
+| Amor e Guerra        | Romance              |  45.00 |
+| Python para Todos    | Tecnologia           | 120.50 |
++----------------------+----------------------+--------+
+
+m) Listagem contendo os preços e os títulos dos livros, ordenada em ordem decrescente de
+preço.
+
+SELECT titulo, preco
+FROM livro
+ORDER BY preco DESC;
++----------------------+--------+
+| titulo               | preco  |
++----------------------+--------+
+| Python para Todos    | 120.50 |
+| História do Brasil   |  89.99 |
+| Pensamentos Modernos |  72.30 |
+| O Futuro Hoje        |  59.90 |
+| Amor e Guerra        |  45.00 |
++----------------------+--------+
+
+n) Listagem dos nomes dos autores brasileiros com mês e ano de nascimento, por ordem
+decrescente de idade e por ordem crescente de nome do autor.
+
+SELECT nome, 
+FROM autor
+
+o) Listagem das editoras e dos títulos dos livros lançados pela editora, ordenada por nome da
+editora e pelo título do livro.
+
+SELECT editora.razao_social, livro.titulo
+FROM livro
+JOIN editora  ON livro.editora_codigo = editora.codigo
+ORDER BY editora.razao_social AND livro.titulo;
++---------------+----------------------+
+| razao_social  | titulo               |
++---------------+----------------------+
+| Editora Alpha | O Futuro Hoje        |
+| Editora Alpha | Python para Todos    |
+| Editora Beta  | Amor e Guerra        |
+| Editora Beta  | Pensamentos Modernos |
+| Editora Gama  | História do Brasil   |
++---------------+----------------------+
+
+
+p) Listagem de assuntos, contendo os títulos dos livros dos respectivos assuntos, ordenada
+pela descrição do assunto.
+SELECT assunto.descricao, livro.titulo
+FROM livro
+JOIN assunto  ON livro.assunto_codigo = assunto.codigo
+ORDER BY assunto.descricao;
++----------------------+----------------------+
+| descricao            | titulo               |
++----------------------+----------------------+
+| Ficção Científica    | O Futuro Hoje        |
+| Filosofia            | Pensamentos Modernos |
+| História             | História do Brasil   |
+| Romance              | Amor e Guerra        |
+| Tecnologia           | Python para Todos    |
++----------------------+----------------------+
+
+
+
+
+
+
+
+
+
+
+

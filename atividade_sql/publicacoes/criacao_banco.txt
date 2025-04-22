@@ -30,7 +30,7 @@ CREATE TABLE livro(
 	codigo INT AUTO_INCREMENT,  
 	ISBN VARCHAR(13) NOT NULL, 
 	titulo VARCHAR(45) NOT NULL,   
-	preço DOUBLE NOT NULL, 
+	preco DECIMAL(10,2) NOT NULL, 
     data_lancamento DATE NOT NULL,  
     assunto_codigo INT NOT NULL,  
     editora_codigo INT NOT NULL,  

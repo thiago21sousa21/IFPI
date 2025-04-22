@@ -1,0 +1,41 @@
+INSERT INTO nacionalidade (descricao) VALUES
+('Brasileira'),
+('Portuguesa'),
+('Estadunidense'),
+('Japonesa'),
+('Argentina');
+
+INSERT INTO assunto (descricao) VALUES
+('Ficção Científica'),
+('Romance'),
+('História'),
+('Tecnologia'),
+('Filosofia');
+
+INSERT INTO editora (cnpj, razao_social) VALUES
+('12345678000191', 'Editora Alpha'),
+('98765432000177', 'Editora Beta'),
+('45678912000166', 'Editora Gama');
+
+INSERT INTO autor (cpf, nome, data_nascimento, nacionalidade_codigo) VALUES
+('11111111111', 'João Silva', '1980-05-21', 1),
+('22222222222', 'Maria Santos', '1975-11-02', 2),
+('33333333333', 'Carlos Souza', '1990-07-14', 1),
+('44444444444', 'Ana Pereira', '1988-03-30', 3),
+('55555555555', 'Lúcia Tanaka', '1995-12-25', 4);
+
+INSERT INTO livro (ISBN, titulo, preco, data_lancamento, assunto_codigo, editora_codigo) VALUES
+('9781234567890', 'O Futuro Hoje', 59.90, '2020-08-01', 1, 1),
+('9780987654321', 'Amor e Guerra', 45.00, '2018-03-10', 2, 2),
+('9781122334455', 'História do Brasil', 89.99, '2019-05-15', 3, 3),
+('9782233445566', 'Python para Todos', 120.50, '2022-01-20', 4, 1),
+('9783344556677', 'Pensamentos Modernos', 72.30, '2021-07-07', 5, 2);
+
+INSERT INTO autor_livro (autor_codigo, livro_codigo) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(3, 4),  -- Carlos coautor de Python para Todos
+(1, 3);  -- João também contribuiu para História do Brasil

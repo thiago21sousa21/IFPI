@@ -1,0 +1,41 @@
+Questão 2 (5,0 pontos)
+I. Escreva o script de criação do banco de dados “publicacoes” e respectivas tabelas.
+II. Escreva os comandos SQL para inserção de dados nas tabelas.
+III. Escreva os comandos SQL para as consultas abaixo.
+Tabela ASSUNTO: codigo, descrição
+Tabela EDITORA: codigo, CNPJ, razãoSocial
+Tabela AUTOR: codigo, CPF, nome, dataNascimento, nacionalidade_codigo
+Tabela LIVRO: codigo, ISBN, titulo, preço, dataLançamento, assunto_codigo, editora_codigo
+Tabela AUTOR_LIVRO: autor_codigo, livro_codigo
+Tabela NACIONALIDADE: codigo, descrição
+Obs.:
+• Os atributos sublinhados são chave primária;
+• Os atributos em itálico são chave estrangeira;
+• Os atributos CNPJ, CPF e ISBN são chaves únicas;
+• Um livro pode ter mais de um autor.
+a) Livros que possuam preços entre R$ 100,00 e R$ 200,00.
+b) Livros cujos títulos possuam a palavra ‘Banco’.
+c) Livros que foram lançados há mais de 5 anos.
+d) Quantidade total de livros.
+e) Soma total dos preços dos livros.
+f) Maior preço dos livros.
+g) Quantidade de livros para cada assunto.
+h) Assuntos cujo preço médio dos livros ultrapassa R$ 50,00.
+i) Assuntos que possuem pelo menos 2 livros.
+j) Nome e CPF dos autores que nasceram após 1° de janeiro de 1970.
+k) Nome e CPF dos autores que não são brasileiros.
+l) Listagem dos livros contendo título, assunto e preço, ordenada em ordem crescente por
+assunto.
+m) Listagem contendo os preços e os títulos dos livros, ordenada em ordem decrescente de
+preço.
+n) Listagem dos nomes dos autores brasileiros com mês e ano de nascimento, por ordem
+decrescente de idade e por ordem crescente de nome do autor.
+o) Listagem das editoras e dos títulos dos livros lançados pela editora, ordenada por nome da
+editora e pelo título do livro.
+p) Listagem de assuntos, contendo os títulos dos livros dos respectivos assuntos, ordenada
+pela descrição do assunto.
+q) Listagem dos nomes dos autores e os livros de sua autoria, ordenada pelo nome do autor.
+r) Editoras que publicaram livros escritos pelo autor ‘Machado de Assis’.
+s) preço do livro mais caro publicado pela editora ‘Books Editora’ sobre banco de dados.
+t) Nome e CPF do autor brasileiro que tenha nascido antes de 1° de janeiro de 1950 e os
+títulos dos livros de sua autoria, ordenado pelo nome do autor e pelo título do livro.
