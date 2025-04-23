@@ -201,6 +201,14 @@ ORDER BY assunto.descricao;
 | Tecnologia           | Python para Todos    |
 +----------------------+----------------------+
 
+q) Listagem dos nomes dos autores e os livros de sua autoria, ordenada pelo nome do autor.
+SELECT a.nome, l.titulo
+FROM livro l
+JOIN autor_livro a_c  ON a_c.livro_codigo = l.codigo
+JOIN autor a ON a_c.autor_codigo = a.codigo
+ORDER BY a.nome;
+
+
 
 
 

@@ -1,0 +1,36 @@
+
+INSERT INTO nacionalidade
+	VALUES
+		(1, 'Brasil'),
+		(2, 'Portugal'),
+		(3, 'Espanha');
+    
+INSERT INTO categoria
+	VALUES 
+		(1, 'Romance'),
+		(2, 'Trovadorismo'),
+		(3, 'Realismo');
+
+INSERT INTO autor
+	VALUES 
+		('1111111111', 'Machado de Assis', 1),
+		('2222222222', 'Luis de Camões', 2),
+		('3333333333', 'Pietro de la Puerta', 3);
+		
+INSERT INTO editora
+	VALUES 
+		('cnpj1111111111', 'Editora Dos Brasileiros'),
+		('cnpj2222222222', 'Editora Dos Portugueses'),
+		('cnpj3333333333', 'Editora Dos Espanhois');
+
+INSERT INTO livro
+	VALUES
+		('isbn1111', 'O sitio do picapau amarelo', '1990', 1,'cnpj1111111111'),
+		('isbn2222', 'Os lusiadas', '1890', 2,'cnpj2222222222'),
+		('isbn3333', 'O Salvador Dali', '1895', 3,'cnpj3333333333');
+        
+INSERT INTO autor_livro
+	VALUES
+		(1111111111, 'isbn1111'),
+        (2222222222, 'isbn2222'),
+		(3333333333, 'isbn3333');

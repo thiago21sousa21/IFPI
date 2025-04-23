@@ -1,0 +1,66 @@
+CREATE SCHEMA biblioteca;
+
+USE biblioteca;
+
+-- -----------------------------------------------------
+-- Table categoria
+-- -----------------------------------------------------
+CREATE TABLE categoria (
+  codigo INT NOT NULL,
+  descricao VARCHAR(45),
+  PRIMARY KEY (codigo)
+);
+
+
+-- -----------------------------------------------------
+-- Table editora
+-- -----------------------------------------------------
+CREATE TABLE editora (
+  cnpj VARCHAR(14) NOT NULL,
+  razaosocial VARCHAR(45),
+  PRIMARY KEY (cnpj)
+);
+-- -----------------------------------------------------
+-- Table livro
+-- -----------------------------------------------------
+CREATE TABLE livro (
+  isbn VARCHAR(20) NOT NULL,
+  titulo VARCHAR(45) NOT NULL,
+  ano INT NULL,
+  categoria_codigo INT NOT NULL,
+  editora_cnpj VARCHAR(14) NOT NULL,
+  PRIMARY KEY (isbn),
+  FOREIGN KEY (categoria_codigo) REFERENCES categoria (codigo),
+  FOREIGN KEY (editora_cnpj) REFERENCES editora (cnpj)
+);
+-- -----------------------------------------------------
+-- Table nacionalidade
+-- -----------------------------------------------------
+CREATE TABLE nacionalidade (
+  codigo INT NOT NULL,
+  descricao VARCHAR(45),
+  PRIMARY KEY (codigo)
+);
+
+-- -----------------------------------------------------
+-- Table autor
+-- -----------------------------------------------------
+CREATE TABLE autor (
+  passaporte VARCHAR(10) NOT NULL,
+  nome VARCHAR(45),
+  nacionalidade_codigo INT NOT NULL,
+  PRIMARY KEY (passaporte),
+  FOREIGN KEY (nacionalidade_codigo) REFERENCES nacionalidade (codigo)
+);
+
+
+-- -----------------------------------------------------
+-- Table autor_livro
+-- -----------------------------------------------------
+CREATE TABLE autor_livro (
+  autor_passaporte VARCHAR(10) NOT NULL,
+  livro_isbn VARCHAR(20) NOT NULL,
+  PRIMARY KEY (autor_passaporte, livro_isbn),
+  FOREIGN KEY (autor_passaporte) REFERENCES autor (passaporte),
+  FOREIGN KEY (livro_isbn)  REFERENCES livro (isbn)
+);
