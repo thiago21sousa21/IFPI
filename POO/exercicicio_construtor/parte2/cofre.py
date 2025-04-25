@@ -43,8 +43,7 @@ class cofre():
         if not self.password:
             print("Vamos definir sua primeira senha, certifique-se de nunca perder, pois após 3 erros apenas o fabricante com nota fiscal poderá abrir o cofre:")
             nova_senha = input("digite aqui a nova senha: ")
-            self.password = nova_senha
-            print("senha alterada")
+            self.validar_senha(nova_senha)
         else:
             print("Para trocar de senha primeiro digite a senha antiga")
             for n in range(self.attemp):
@@ -55,7 +54,7 @@ class cofre():
                     break
                 self.blocked =True
             nova_senha = input("Digite a nova senha: ")
-            self.password = nova_senha
+            self.validar_senha(nova_senha)
             self.resetar_tentativas()
 
     def resetar_tentativas(self):
@@ -64,9 +63,18 @@ class cofre():
     def exibir_historico(self):
         for idx,tentativa in enumerate(self.historic):
             print(f"{idx+1}° tentativa - momento: {tentativa["moment"]} - sucesso: {"sim" if tentativa["sucess"] else "não"}")
+    
+    def validar_senha(self, senha):
+        tem_numero = any(caractere.isdigit() for caractere in senha)
+        if not tem_numero: 
+            return print("A senhe precisa ter ao menos um número")
+        if len(senha)< 6: 
+            return  print("A senhe precisa ter no mínimo 6 dígitos")
+        self.password = senha
+        print("senha alterada")
+     
+           
+
 
 cofre1 = cofre()
 cofre1.trocar_senha()
-cofre1.fechar_cofre()
-cofre1.abrir_cofre()
-cofre1.exibir_historico()
