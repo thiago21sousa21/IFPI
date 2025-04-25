@@ -1,3 +1,5 @@
+import datetime
+
 class cofre():
     def __init__(self):
         self.password = None
@@ -13,10 +15,10 @@ class cofre():
         for n in range(self.attemp):
             senha =  input(f"Digite a senha ({n}º tentativa:) ")
             if (senha == self.password):
+                self.exibir_historico()
                 self.resetar_tentativas()
                 self.closed = False
                 print("Cofre Aberto")
-                self.resetar_tentativas()
                 break
             print("Cofre bloqueado contate o fabricante com nota fiscal")
             self.blocked =True    
@@ -46,8 +48,7 @@ class cofre():
             self.password = nova_senha
             self.resetar_tentativas()
 
-    def resetar_tentativas(self):
-        self.attemp = 3  
+
 
 cofre1 = cofre()
 cofre1.abrir_cofre()
@@ -56,4 +57,3 @@ cofre1.trocar_senha()
 cofre1.fechar_cofre()
 cofre1.abrir_cofre()
 cofre.trocar_senha()
-

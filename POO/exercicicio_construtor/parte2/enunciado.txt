@@ -1,0 +1,33 @@
+Implemente novas funcionalidades para
+a classe Confre_Eletronico definido na aula anterior...
+
+Implemente os seguintes comportamentos/atributos:
+1.      Histórico de Acessos
+o   Adicione à classe Cofre_Eletronico um atributo que registre o histórico de todas as
+tentativas de abertura, com data e hora, se foram bem-sucedidas ou não.
+
+
+o   Implemente um método exibir_historico() que imprima essas informações.
+
+
+2.      Bloqueio Automático
+
+
+o   Modifique o comportamento da classe para que, ao atingir 0 tentativas, o cofre entre em
+estado de "bloqueado", impedindo novas tentativas até que seja
+resetado manualmente.
+
+
+o   Crie o método desbloquear_cofre() que só pode ser chamado por um "código
+mestre".
+
+
+3.      Senhas Seguras
+
+
+o   No método trocar_senha, implemente uma verificação para garantir que a nova senha
+tenha, no mínimo, 6 caracteres e contenha pelo menos um número.
+
+
+
+Utilize métodos para modificar os atributos, respeitando as regras do problema.
