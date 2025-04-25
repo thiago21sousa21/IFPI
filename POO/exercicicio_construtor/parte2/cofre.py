@@ -7,6 +7,7 @@ class cofre():
         self.closed = False
         self.blocked = False
         self.historic = []
+        self.master_password = '12344321'
 
     def abrir_cofre(self):
         if self.blocked:
@@ -72,8 +73,15 @@ class cofre():
             return  print("A senhe precisa ter no mínimo 6 dígitos")
         self.password = senha
         print("senha alterada")
-     
-           
+    
+    def desbloquear_cofre(self):
+        senha = input("digite a senha master: ")
+        if (senha == self.master_password):
+            self.blocked = False
+            self.resetar_tentativas()
+            print("Cofre desbloqueado")
+        else:
+            print("Senha master incorreta")
 
 
 cofre1 = cofre()
