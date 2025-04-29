@@ -1,0 +1,23 @@
+CREATE DATABASE colecaoCD;
+
+USE colecaoCD;
+
+CREATE TABLE cd(
+	codigo INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(45),
+    dataCompra DATE,
+    valorPago DECIMAL(10,2),
+    localCompra VARCHAR(45),
+    album CHAR(1),
+    artista VARCHAR(50),
+	CONSTRAINT check_album CHECK (LOWER(album)  IN ("s", "n" ))
+);
+
+CREATE TABLE musica(
+	codigoCd INT,
+    numero INT,
+    nome VARCHAR(45),
+    duracao INT,
+    CONSTRAINT pk_composta PRIMARY KEY(codigoCd, numero),
+    CONSTRAINT fk_cd_codigo FOREIGN KEY (codigoCd) REFERENCES cd(codigo)
+);
