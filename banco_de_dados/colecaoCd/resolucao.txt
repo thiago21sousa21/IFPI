@@ -8,7 +8,14 @@ ORDER BY nome;
 
 c) Mostrar os campos nome e data da compra dos CDs classificados por data de compra em
 ordem decrescente
+SELECT nome, dataCompra As 'data da compra' 
+FROM cd
+ORDER BY dataCompra DESC;
+
 d) Mostrar o total gasto com a compra dos CDs
+SELECT SUM(valorPago)
+FROM cd;
+
 e) Mostrar todas as músicas (todos os campos) do CD com o código 1
 f) Mostrar o nome do CD e o nome das músicas de todos CDs
 g) Mostrar o nome e o artista de todas as músicas cadastradas
