@@ -1,0 +1,35 @@
+a) Mostrar todos os CDs
+SELECT * FROM cd;
+
+b) Mostrar os campos nome e data da compra dos CDs ordenados por nome
+SELECT nome, dataCompra As 'data da compra' 
+FROM cd
+ORDER BY nome;
+
+c) Mostrar os campos nome e data da compra dos CDs classificados por data de compra em
+ordem decrescente
+d) Mostrar o total gasto com a compra dos CDs
+e) Mostrar todas as músicas (todos os campos) do CD com o código 1
+f) Mostrar o nome do CD e o nome das músicas de todos CDs
+g) Mostrar o nome e o artista de todas as músicas cadastradas
+h) Mostrar o tempo total de músicas cadastradas
+i) Mostrar o número, nome e tempo das músicas do CD com o código 5 por ordem de
+número
+j) Mostrar o número, nome e tempo das músicas do CD com o nome “Reginaldo Rossi –
+Perfil” por ordem de nome
+k) Mostrar o tempo total de músicas por CD
+l) Mostrar a quantidade de músicas cadastradas
+m) Mostrar a média de duração das músicas cadastradas
+n) Mostrar a quantidade de CDs
+o) Mostrar o nome das músicas do artista Reginaldo Rossi
+p) Mostrar a quantidade de músicas por CDs
+q) Mostrar o nome de todos os CDs comprados no “Submarino.com”
+r) Mostrar o nome do CD e o nome da primeira música de todos os CDs
+s) Mostrar uma listagem de músicas em ordem alfabética
+t) Mostrar todos os CDs que são álbuns
+u) Mostrar o CD que custou mais caro
+v) Mostrar os CDs comprados em julho de 2014
+w) Mostrar os CDs cujo valor pago esteja entre R$ 30,00 e R$ 50,00
+x) Mostrar as musicas dos CDs com código 1, 3 e 6
+y) Mostrar o CD que tem a maior quantidade de músicas cadastradas
+z) Mostrar o artista que possui a maior quantidade de CDs cadastrados
