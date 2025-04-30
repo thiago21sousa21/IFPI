@@ -17,18 +17,66 @@ SELECT SUM(valorPago)
 FROM cd;
 
 e) Mostrar todas as músicas (todos os campos) do CD com o código 1
+SELECT * 
+FROM musica
+WHERE codigoCd = 1;
+
 f) Mostrar o nome do CD e o nome das músicas de todos CDs
+SELECT cd.nome AS 'nome do cd' , musica.nome AS 'nome da musica'
+FROM musica
+JOIN cd ON musica.codigoCd = cd.codigo;
+-- where cd.codigo =1;
+
 g) Mostrar o nome e o artista de todas as músicas cadastradas
+SELECT musica.nome, cd.artista
+FROM musica
+JOIN cd ON musica.codigoCd = cd.codigo;
+
 h) Mostrar o tempo total de músicas cadastradas
+SELECT SUM(duracao) AS tempo_total
+FROM musica;
+
 i) Mostrar o número, nome e tempo das músicas do CD com o código 5 por ordem de
 número
+SELECT numero, nome, duracao AS 'tempo da musica'
+FROM musica 
+WHERE codigoCd = 5;
+
+
 j) Mostrar o número, nome e tempo das músicas do CD com o nome “Reginaldo Rossi –
 Perfil” por ordem de nome
-k) Mostrar o tempo total de músicas por CD
+ SELECT numero, cd.nome ,duracao AS 'tempo_musicaCD_nome'  
+ FROM musica  
+ JOIN cd ON musica.codigoCd = cd.codigo 
+ WHERE cd.nome ='Reginaldo Rossi – Perfil'; 
+
+k) Mostrar o tempo total de músicas por CD 
+ SELECT cd.codigo, SUM(duracao) AS tempo_total 
+ FROM musica m
+ JOIN cd ON cd.codigo = m.codigoCd
+ GROUP BY cd.codigo;
+
+
 l) Mostrar a quantidade de músicas cadastradas
+SELECT COUNT(*) AS quantidade_musicas
+FROM musica;
+
+
 m) Mostrar a média de duração das músicas cadastradas
+SELECT AVG(duracao) AS duracao
+FROM musica
+
 n) Mostrar a quantidade de CDs
+SELECT COUNT(*) AS quantidade_CDs
+FROM cd;
+
+
 o) Mostrar o nome das músicas do artista Reginaldo Rossi
+SELECT musica.nome, cd.artista
+FROM musica
+JOIN cd ON cd.codigo = musica.codigoCd
+WHERE cd.artista LIKE '%Reginaldo%';
+
 p) Mostrar a quantidade de músicas por CDs
 q) Mostrar o nome de todos os CDs comprados no “Submarino.com”
 r) Mostrar o nome do CD e o nome da primeira música de todos os CDs
