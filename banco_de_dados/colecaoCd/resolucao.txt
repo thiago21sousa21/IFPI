@@ -78,8 +78,27 @@ JOIN cd ON cd.codigo = musica.codigoCd
 WHERE cd.artista LIKE '%Reginaldo%';
 
 p) Mostrar a quantidade de músicas por CDs
+SELECT cd.nome , COUNT(musica.numero) AS quantidade_musica
+FROM musica
+JOIN cd ON musica.codigoCd = cd.codigo
+GROUP BY cd.codigo;
+
 q) Mostrar o nome de todos os CDs comprados no “Submarino.com”
+SELECT nome, localCompra 
+FROM cd
+WHERE LOWER(localCompra) LIKE '%submarino.com%';
+
 r) Mostrar o nome do CD e o nome da primeira música de todos os CDs
+SELECT 
+    c.nome AS nome_cd, 
+    (SELECT m.nome
+     FROM musica m
+     WHERE m.codigoCd = c.codigo
+     ORDER BY m.numero ASC
+     LIMIT 1) AS primeira_musica
+FROM 
+    cd c;
+    
 s) Mostrar uma listagem de músicas em ordem alfabética
 t) Mostrar todos os CDs que são álbuns
 u) Mostrar o CD que custou mais caro
