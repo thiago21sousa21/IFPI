@@ -27,7 +27,7 @@ def exer4(padrao = 'wrong'):
     cep = '12345-678'
     resultado = re.match(rf'{padrao}',cep)
     print("cep válido " if resultado else "cep inválido")
-exer4('\d{5}-\d{3}')
+#exer4('\d{5}-\d{3}')
 
 def exer5(padrao = 'wrong'):
     """ Verifique se a string começa com a palavra "Item" seguida de um número qualquer (ex: Item23)."""
@@ -38,8 +38,12 @@ def exer5(padrao = 'wrong'):
 
 def exer6(padrao = "wrong"):
     """A string pode começar com "Sr." ou "Sra.", seguido de um espaço e um nome. Verifique se o padrão é seguido corretamente."""
-    texto = "Sra. Silva"
+    texto = "Sr. Silva"
     resultado = re.match(rf"{padrao}", texto)
     print("Nome com titulo válido " if resultado else "padrão inválido")
-#exer6("Sra")
+exer6("^(Sra\.|Sr\.)")
+
+
+
+
 
