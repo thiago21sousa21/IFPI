@@ -1,4 +1,5 @@
 import re
+from datetime import date
 
 class veiculo:
   def __init__(self, chassi, marca, modelo, ano, cor, placa=None, proprietario=None, quilometragem=None, valor = None):
@@ -12,14 +13,9 @@ class veiculo:
     self.quilometragem = quilometragem
     self.valor = valor 
 
-  def validar_placa(self, placa):
-    padrao = r'^[A-Z]{3}-[A-Z][A-Z0-9][0-9]{2}$'
-    return re.match(padrao, placa.upper().strip()) is not None
-  
-
 def validar_placa(placa):
-    padrao = r'^[A-Z]{3}-?[0-9]{4}$|^[A-Z]-?\d[A-Z]\d{2}$'
-    return re.match(padrao, placa.upper().strip()) is not 
+    padrao = r'^[A-Z]{3}-?[0-9]{4}$|^[A-Z]{3}-?\d[A-Z]\d{2}$'
+    return re.match(padrao, placa.upper().strip()) is not None
     
  def calcular_depreciacao(self):
     # o Calcula a depreciação do veículo com base no ano de fabricação e no valor de
@@ -49,10 +45,10 @@ def validar_placa(placa):
     return f'novo proprietário: {novo_proprietario}'
   
   def vender(self, valor_venda, novo_proprietario ):
-    """o Recebe o valor de venda e o nome do novo proprietário.
-    o Calcula o valor depreciado do veículo e compara com o valor de venda.
-    o Atualiza o nome do proprietário com o novo proprietário.
-    o Retorna se o veículo foi vendido abaixo ou acima do valor de mercado."""
+    """* Recebe o valor de venda e o nome do novo proprietário.
+    * Calcula o valor depreciado do veículo e compara com o valor de venda.
+    * Atualiza o nome do proprietário com o novo proprietário.
+    * Retorna se o veículo foi vendido abaixo ou acima do valor de mercado."""
     valor_depreciado = self.calcular_depreciacao()
     self.atualizar_proprietario(novo_proprietario)
     return "vendido acima do mercado" if valor_venda > valor_depreciado else "vendido abaixo do mercado"
