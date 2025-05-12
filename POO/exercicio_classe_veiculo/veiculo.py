@@ -53,8 +53,16 @@ def validar_placa(placa):
     self.atualizar_proprietario(novo_proprietario)
     return "vendido acima do mercado" if valor_venda > valor_depreciado else "vendido abaixo do mercado"
 
-
-
-v = veiculo(1, 1, 1, 2024, 1, valor=100)
-v.atualizar_proprietario("thiago de sousa santos")
-v.vender(100, "thiago")
+  def __str__(self):
+    """o Retorna uma string formatada com todas as informações do veículo, incluindo
+    os atributos opcionais."""
+    i= ''
+    i+= f'chassi = {self.chassi}' + '\n'
+    i+= f'modelo = {self.modelo}' + '\n'
+    i+= f'ano = {self.ano}' + '\n'
+    i+= f'cor = {self.cor}' + '\n'
+    i+= f'placa = {self.placa}' + '\n'
+    i+= f'proprietario = {self.proprietario}' + '\n'
+    i+= f'quilometragem = {self.quilometragem}' + '\n'
+    i+= f'valor = {self.valor}'
+    return i
