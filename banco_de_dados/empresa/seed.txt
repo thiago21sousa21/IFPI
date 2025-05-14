@@ -1,0 +1,14 @@
+INSERT INTO departamentos
+	(dcodigo, dnome)
+VALUES 
+('001', 'NomeDepartamento1'),
+('002', 'NomeDepartamento2'),
+('003', 'NomeDepartamento3');
+
+
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario)
+VALUES
+('000001', 'Nome1', 'Sobrenome1', '001', 'gerente', 'm', '2000-01-01', '30000' ),
+('000002', 'Nome2', 'Sobrenome2', '001', 'operario', 'm', '2000-01-01', '29000' );
+

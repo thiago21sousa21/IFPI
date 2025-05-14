@@ -1,0 +1,84 @@
+1.      Mostre o sobrenome, primeiro nome, departamentos data de nascimento, 
+data de admissão e salário de todos os empregados que ganham mais que $30.000 por ano.
+
+INSERT INTO departamentos
+	(dcodigo, dnome)
+VALUES 
+('001', 'NomeDepartamento1'),
+('002', 'NomeDepartamento2'),
+('003', 'NomeDepartamento3');
+
+
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario)
+VALUES
+('000001', 'Nome1', 'Sobrenome1', '001', 'gerente', 'm', '2000-01-01', '30000' ),
+('000002', 'Nome2', 'Sobrenome2', '001', 'operario', 'm', '2000-01-01', '29000' );
+
+
+SELECT nome, sobrenome, d.dnome AS departamento, datanasc AS data_nascimento, dataadm AS data_de_admissao, salario
+FROM empregados e
+JOIN departamentos d ON e.dept = d.dcodigo
+WHERE e.salario >= 30000;
+
+2.      Liste todas as informações de qualquer departamento cujo gerente seja desconhecido.
+
+SELECT * FROM departamentos WHERE gerente IS NULL;
+
+3.Mostre o sobrenome, primeiro nome, departamento, data de nascimento, 
+data de admissão e salário de todos os empregados que ganhem menos de $20.000 por ano. 
+Classifique o resultado pelo sobrenome e primeiro nome;
+
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario)
+VALUES
+('000003', 'Nome3', 'Sobrenome3', '003', 'operario', 'm', '2000-01-01', '10000' );
+
+SELECT nome, sobrenome, d.dnome AS departamento, datanasc AS data_nascimento, dataadm AS data_de_admissao, salario
+FROM empregados e
+JOIN departamentos d ON e.dept = d.dcodigo
+WHERE e.salario <= 20000
+ORDER BY sobrenome, nome;
+
+4. Liste tudo sobre os departamentos subordinados ao departamento A00.
+
+INSERT INTO departamentos
+	(dcodigo, dnome)
+VALUES 
+('A00', 'NomeDepartamento4');
+
+SELECT *
+FROM departamentos
+WHERE dcodigo = 'A00';
+
+5.Liste o código e o nome dos departamento que apresentam “SERVIÇO” compondo seu nome.
+
+INSERT INTO departamentos
+	(dcodigo, dnome)
+VALUES 
+('004', 'SERVIÇO');
+
+SELECT dcodigo AS codigo, dnome AS nome
+FROM departamentos
+WHERE dnome = 'SERVIÇO';
+
+6.Mostre a matricula, sobrenome, departamento e telefone dos empregados cujo código de departamento estejam compreendidos entre D11 e D21 (inclusive).
+
+INSERT INTO departamentos
+	(dcodigo, dnome)
+VALUES 
+('D11', 'NomeDepartamentoD11'),
+('D15', 'NomeDepartamentoD15'),
+('D21', 'NomeDepartamentoD21');
+
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario, fone)
+VALUES
+('000004', 'Nome4', 'Sobrenome4', 'D11', 'operario', 'm', '2000-01-01', '10000', '(99)99999-9999'),
+('000005', 'Nome5', 'Sobrenome5', 'D15', 'operario', 'm', '2000-01-01', '10000', '(99)99999-9999'),
+('000006', 'Nome6', 'Sobrenome6', 'D21', 'operario', 'm', '2000-01-01', '10000', '(99)99999-9999');
+
+SELECT matr AS matricula, sobrenome, dept AS departamento, fone AS contato
+FROM empregados e
+JOIN departamentos d ON d.dcodigo = e.dept
+WHERE e.dept BETWEEN 'D11' AND 'D21';

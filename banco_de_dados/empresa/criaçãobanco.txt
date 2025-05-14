@@ -12,7 +12,7 @@ CREATE TABLE empregados(
     cargo CHAR(10), -- cargo do empregado
     niveleduc DECIMAL, -- educação formal em anos
     sexo CHAR(1), -- m = masc, f=fem
-    CHECK (LOWER(sexo) IN ("s", "n")),
+    CHECK (LOWER(sexo) IN ("m", "f")),
     datanasc DATE, -- data nascimento
     salario DECIMAL(9,2), -- salário anual
     bonus DECIMAL(9,2), -- bônus anual
