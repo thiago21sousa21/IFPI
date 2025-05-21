@@ -7,7 +7,7 @@ CREATE TABLE empregados(
     nome VARCHAR(12) NOT NULL, -- primeiro nome
     sobrenome VARCHAR(15) NOT NULL, -- sobrenome
     dept CHAR(3), -- codigo de departamento do empregado (fk)
-    fone CHAR, -- numero de telefone
+    fone VARCHAR(14), -- numero de telefone
     dataadm DATE, -- data de admissão
     cargo CHAR(10), -- cargo do empregado
     niveleduc DECIMAL, -- educação formal em anos

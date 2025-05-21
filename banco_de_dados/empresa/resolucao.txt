@@ -82,3 +82,41 @@ SELECT matr AS matricula, sobrenome, dept AS departamento, fone AS contato
 FROM empregados e
 JOIN departamentos d ON d.dcodigo = e.dept
 WHERE e.dept BETWEEN 'D11' AND 'D21';
+
+7.Produza uma lista dos empregados nos departamentos B01, C01 e D01, mostrando o sobrenome,
+ departamento e rendimento (salário + comissão) Liste a saída em ordem descendente de rendimento 
+  dentro de cada departamento.
+
+SELECT nome, sobrenome, dept AS departamento, (salario+comis) as redimento FROM empregados
+WHERE dept IN ("B01","C01","D01");
+
+INSERT INTO departamentos (dcodigo, dnome) VALUES 
+	('B01', 'portaria'),
+    ('C01', 'telemarketing'),
+    ('D01', 'rh');
+
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario, fone, comis)
+VALUES
+('000007', 'Nome7', 'Sobrenome7', 'B01', 'operario', 'm', '2000-01-01', '10000', '(99)99999-9999', '1000'),
+('000008', 'Nome8', 'Sobrenome8', 'C01', 'operario', 'm', '2000-01-01', '20000', '(99)99999-9999', '1000'),
+('000009', 'Nome9', 'Sobrenom9', 'D01', 'operario', 'm', '2000-01-01', '30000', '(99)99999-9999', '1000');
+
+8. Mostre o sobrenome, salário anual e departamento dos empregados com salário mensal maior que $3000.
+Classifique a lista pelo sobrenome.
+
+SELECT nome, sobrenome, salario ,dept as departamento
+FROM empregados
+WHERE salario > 3000
+ORDER BY sobrenome; 
+
+
+-- 9.      Produza uma lista de todos os empregados cujo departamento somente com “E”. 
+-- Mostre a matricula, primeiro nome e sobrenome. Classifique pelo sobrenome.
+
+SELECT matr, nome, sobrenome, dept
+FROM empregados
+WHERE dept LIKE 'E%';
+
+
+
