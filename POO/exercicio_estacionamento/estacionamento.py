@@ -1,63 +1,109 @@
-# Utilizando o processo de abstração, implemente uma classe em Python que represente um
-# cartão de estacionamento de shopping. Identifique atributos mutáveis e imutáveis,
-# implemente um construtor da classe e métodos para manipulação dos atributos mutáveis.
-# Faça todas as validações possíveis. Utilize encapsulamento nos atributos necessários
-# implementando em seguida os decoradores de leitura e/ou escrita. Crie objetos para testar os
-# métodos implementados.
-
 from datetime import datetime, timedelta
+import uuid
 
-class Estacionamento:
 
-    numero_cartao = 0
+class CartaoEstacionamento:
     def __init__(self, placa_veiculo: str):
-        # 1. Atributos:
-        # - Número do cartão (gerado automaticamente)
-        self.numero_cartao += 1
-        # - Placa do veículo (string)
-        self.__placa_veiculo = placa_veiculo
-        # - Data e hora de entrada (registrada automaticamente no momento da criação do cartão)
-        self.__data_hora_entrada = datetime.now()
-        # - Status do cartão ("aberto" ou "finalizado")
+        self.__numero_cartao = str(uuid.uuid4())  # número único
+        self.__placa_veiculo = placa_veiculo.strip().upper()
+        self.__data_entrada = datetime.now()
+        self.__data_saida = None
         self.__status = "aberto"
-        # - Data e hora de saída (registrada quando o cartão é finalizado)
-        self.__data_hora_saida = None
-        # - Valor total a ser pago (calculado com base no tempo de permanência)
         self.__valor_total = 0.0
+        self.__data_pagamento = None
 
+    @property
+    def numero_cartao(self):
+        return self.__numero_cartao
 
+    @property
+    def placa_veiculo(self):
+        return self.__placa_veiculo
 
-    # 2. Métodos:
-    def registrar_pagamento(self, data_hora_saida: datetime = datetime.now()):
-        # - Um método para registrar o pagamento, que define a data e hora de saída, altera o
-        # status para "pago" e calcula o valor total a ser pago.
-        if self.__status == "aberto":
-            self.__data_hora_saida = data_hora_saida
-            self.__status = "pago"
-            self.__valor_total = self.calcular_valor_pago()
+    @property
+    def data_entrada(self):
+        return self.__data_entrada
+
+    @property
+    def status(self):
+        return self.__status
+
+    @property
+    def data_saida(self):
+        return self.__data_saida
+
+    @property
+    def valor_total(self):
+        return self.__valor_total
+
+    def calcular_valor(self, tempo_personalizado=None):
+        fim = tempo_personalizado if tempo_personalizado else datetime.now()
+        tempo_total = fim - self.__data_entrada
+        minutos = tempo_total.total_seconds() / 60
+
+        if minutos <= 120:
+            return 8.0
         else:
-            raise ValueError("O cartão já foi finalizado.")
+            minutos_excedentes = minutos - 120
+            fracoes_15_min = -(-minutos_excedentes // 15) 
+            return 8.0 + (fracoes_15_min * 0.5)
 
+    def consultar_valor(self):
+        if self.__status == "aberto":
+            return self.calcular_valor()
+        return self.__valor_total
 
-# - Um método para consultar o valor acumulado, permitindo ao cliente verificar o custo do
-# estacionamento antes de finalizar.
-# - Um método para calcular o valor a ser pago, condiderando:
-# - Até 2h de permanência, R$ 8,00
-# - Acima de 2h de permanência cobrar R$ 0,50 a cada fração de 15 min
+    def registrar_pagamento(self):
+        if self.__status != "aberto":
+            raise Exception("Pagamento já registrado ou cartão encerrado.")
 
-# 4. Requisitos de Validação
-# - O número do cartão deve ser único .
-# - Placa do veículo
+        self.__data_pagamento = datetime.now()
+        self.__valor_total = self.calcular_valor(self.__data_pagamento)
+        self.__status = "pago"
 
-# - Um método para registrar a saída: Verificar se o cartão foi pago e se a hora de
-# pagamento for menor ou igual a 1 hora. Mudar o status do cartão para "finalizado"
+    def registrar_saida(self):
+        if self.__status != "pago":
+            raise Exception("Saída não permitida: o pagamento ainda não foi realizado.")
 
-# - O status só pode ser alterado para "finalizado" se o pagamento for executado.
-# - O tempo de permanência deve ser calculado em horas completas e frações, considerando
-# uma tarifa fixa por hora.
-# - A data e hora de saída não podem ser anteriores à data e hora de entrada.
+        agora = datetime.now()
+        tempo_pos_pagamento = agora - self.__data_pagamento
 
-# 5. Teste:
-# - Crie pelo menos três objetos da classe, representando cartões de estacionamento
-# diferentes.
-# - Demonstre os métodos implementados e suas validações em ação.
+        if tempo_pos_pagamento > timedelta(hours=1):
+            raise Exception("Saída não permitida: mais de 1 hora após o pagamento.")
+
+        self.__data_saida = agora
+        if self.__data_saida < self.__data_entrada:
+            raise Exception("Erro: saída anterior à entrada.")
+
+        self.__status = "finalizado"
+
+    def __str__(self):
+        return (f"Cartão: {self.__numero_cartao}\n"
+                f"Placa: {self.__placa_veiculo}\n"
+                f"Entrada: {self.__data_entrada.strftime('%d/%m/%Y %H:%M:%S')}\n"
+                f"Saída: {self.__data_saida.strftime('%d/%m/%Y %H:%M:%S') if self.__data_saida else '---'}\n"
+                f"Status: {self.__status}\n"
+                f"Valor Total: R$ {self.__valor_total:.2f}\n")
+
+from time import sleep
+
+cartao1 = CartaoEstacionamento("ABC-1234")
+sleep(2) 
+print("Valor acumulado cartão 1:", cartao1.consultar_valor())
+cartao1.registrar_pagamento()
+sleep(2)
+cartao1.registrar_saida()
+print(cartao1)
+
+cartao2 = CartaoEstacionamento("XYZ-9876")
+try:
+    cartao2.registrar_saida()
+except Exception as e:
+    print("Erro esperado cartão 2:", e)
+
+cartao3 = CartaoEstacionamento("DEF-4567")
+cartao3._CartaoEstacionamento__data_entrada -= timedelta(hours=3)
+print("Valor acumulado cartão 3:", cartao3.consultar_valor())  # Deve calcular extra
+cartao3.registrar_pagamento()
+cartao3.registrar_saida()
+print(cartao3)
