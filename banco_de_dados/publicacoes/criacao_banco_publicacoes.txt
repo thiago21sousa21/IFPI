@@ -1,0 +1,53 @@
+CREATE database publicacoes;
+USE publicacoes;
+
+CREATE TABLE assunto(
+	codigo INT PRIMARY KEY AUTO_INCREMENT,
+    assunto VARCHAR(45) NOT NULL
+);
+
+CREATE TABLE editora(
+	codigo INT PRIMARY KEY AUTO_INCREMENT,
+    cnpj CHAR(14) NOT NULL UNIQUE,
+    nome VARCHAR(45) NOT NULL
+);
+
+CREATE TABLE autor(
+	codigo INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    passaporte CHAR(6) NOT NULL UNIQUE,
+    dataNascimento DATE NOT NULL,
+    nacionalidade_codigo INT NOT NULL
+);
+
+CREATE TABLE livro(
+	codigo INT PRIMARY KEY AUTO_INCREMENT,
+    isbn CHAR(13) NOT NULL UNIQUE,
+    titulo VARCHAR(100) NOT NULL,
+    preco DECIMAL(10,2) NOT NULL,
+    dataLancamento DATE NOT NULL,
+    assunto_codigo INT NOT NULL,
+    editora_codigo INT NOT NULL
+);
+
+CREATE TABLE autor_livro(
+	autor_codigo INT NOT NULL,
+    livro_codigo INT NOT NULL,
+    PRIMARY KEY (autor_codigo, livro_codigo)
+);
+
+CREATE TABLE nacionalidade(
+	codigo INT PRIMARY KEY AUTO_INCREMENT,
+    pais VARCHAR(45) NOT NULL
+);
+
+ALTER TABLE autor
+	ADD CONSTRAINT fk_nacionalidade_codigo FOREIGN KEY (nacionalidade_codigo) REFERENCES nacionalidade(codigo);
+
+ALTER TABLE livro
+	ADD FOREIGN KEY (assunto_codigo) REFERENCES assunto(codigo),
+    ADD FOREIGN KEY (editora_codigo) REFERENCES editora(codigo);
+
+ALTER TABLE autor_livro
+	ADD FOREIGN KEY (autor_codigo) REFERENCES autor(codigo),
+    ADD FOREIGN KEY (livro_codigo) REFERENCES livro(codigo);
