@@ -30,11 +30,22 @@ class BoletoStatus:
     def cancelado(self):
         return self.__cancelado  
 
-
+class Estilizar:
+    __escape_fim = "\033[m"
+    def __init__(self, texto:str ,cor_letra = 30, cor_fundo = 40, estilo = 0):
+        self.__cor_letra = cor_letra
+        self.__cor_fundo = cor_fundo
+        self.__estilo = estilo
+        self.__escape_inicio = f'\033[{self.__estilo};{self.__cor_letra};{self.__cor_fundo}m'
+        self.__texto = texto
+    
+    def __str__(self):
+        return f'{self.__escape_inicio}{self.__texto}{Estilizar.__escape_fim}'
+    
 class Boleto:
     __numero = 0
     def __init__ (self, valor_original:float, data_pagamento:str):
-        self.__numero = Boleto.__numero
+        self.__numero = Boleto.__numero + 1
         self.__nome_do_pagador = None
         self.__valor_original = float(valor_original)
         self.__data_emissao = datetime.now()
@@ -44,14 +55,15 @@ class Boleto:
         self.__valor_final  = None
 
     def __str__(self):
-        return f"""\033[1;33;48mnumero: {self.numero}
+        texto = f"""numero: {self.numero}
 nome do pagador: {self.nome_do_pagador}
 valor original: {self.valor_original}
 data emissão: {self.data_emissao}
 data vencimento: {self.data_vencimento}
 data pagamento: {self.data_pagamento}
 status do boleto: {self.status_boleto}
-valor final: {self.valor_final}\033[0m"""
+valor final: {self.valor_final}"""
+        return str(Estilizar(texto, 33, 40, 1))
     
     @property
     def numero(self):
@@ -60,6 +72,7 @@ valor final: {self.valor_final}\033[0m"""
     @property
     def nome_do_pagador(self):
         return self.__nome_do_pagador
+    
     @nome_do_pagador.setter
     def nome_do_pagador(self, nome_pagador):
         self.__nome_do_pagador = nome_pagador
@@ -98,28 +111,45 @@ valor final: {self.valor_final}\033[0m"""
         #     raise "A data de vencimento não pode ser maior que a dada de emissão!"
         return data_vencimento
     
+    def __tentar_converter_data(self, momento):
+        try:
+            momento = datetime.strptime(momento, "%d-%m-%Y %H:%M:%S")
+            return momento
+        except Exception as error:
+            return f"Erro ao converter data: {str(error)}"
+
+
     def pagar(self, nome_pagador:str , valor:float , momento_pagamento:str = None):
+
+        if momento_pagamento:
+            momento_pagamento = self.__tentar_converter_data(momento_pagamento)
+
         status = BoletoStatus()
 
         self.__definir_status()
 
-        if self.status_boleto == status.cancelado:
-            raise f'boleto encontra-se com status: {self.status_boleto}'
-        
-        if self.status_boleto == status.pago:
-             raise f'boleto encontra-se com status: {self.status_boleto}'
-        
+        try:
+            if self.status_boleto == status.cancelado:
+                raise Exception( f'boleto encontra-se com status: {self.status_boleto}')
+            
+            if self.status_boleto == status.pago:
+                raise Exception( f'boleto encontra-se com status: {self.status_boleto}')
+        except Exception as erro:
+            print(str(erro))
+
         if self.status_boleto == status.vencido:
-            # calcucar a quantos dias está vencido
             if not momento_pagamento:
                 momento_pagamento = datetime.now()
 
-            dias_de_atraso = momento_pagamento - self.data_vencimento
-            print(dias_de_atraso)
+            dias_de_atraso = self.__calcular_dias_atrasados(self.data_vencimento, momento_pagamento)
+            #dias_de_atraso = (momento_pagamento-self.data_vencimento).days  + 1
+            return dias_de_atraso
         
         self.nome_do_pagador = nome_pagador
 
-    
+    def __calcular_dias_atrasados(self, vencimento:datetime, outra_data:datetime):
+        return int(-(-(outra_data - vencimento).total_seconds()//(60*60*24)))
+
     def __definir_status(self, cancelar:bool = False):
         momento_atual = datetime.now()
         status = BoletoStatus()
