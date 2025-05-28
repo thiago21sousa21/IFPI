@@ -1,0 +1,42 @@
+-- seed até a decima questão
+
+-- Inserindo assuntos
+INSERT INTO assunto (descricao) VALUES 
+('Banco de Dados'),
+('Estruturas de Dados'),
+('Algoritmos'),
+('Engenharia de Software');
+
+-- Inserindo editoras
+INSERT INTO editora (cnpj, nome) VALUES 
+('12345678000101', 'Editora A'),
+('98765432000102', 'Editora B');
+
+-- Inserindo nacionalidades
+INSERT INTO nacionalidade (pais) VALUES 
+('Brasil'),
+('EUA');
+
+-- Inserindo autores
+INSERT INTO autor (nome, passaporte, dataNascimento, nacionalidade_codigo) VALUES 
+('João Silva', 'AB1234', '1980-05-20', 1),
+('Mary Johnson', 'CD5678', '1975-08-15', 2);
+
+-- Inserindo livros
+INSERT INTO livro (isbn, titulo, preco, dataLancamento, assunto_codigo, editora_codigo) VALUES 
+('9780000000001', 'Banco de Dados Avançado', 120.00, '2015-06-10', 1, 1),
+('9780000000002', 'Estruturas de Dados em Java', 80.00, '2018-09-01', 2, 1),
+('9780000000003', 'Algoritmos para Iniciantes', 45.00, '2020-02-15', 3, 2),
+('9780000000004', 'Banco de Dados', 150.00, '2020-02-14', 1, 1),
+('9780000000005', 'Banco e Finanças', 60.00, '2022-01-01', 1, 2),
+('9780000000006', 'Análise de Dados', 55.00, '2023-01-01', 4, 2),
+('9780000000007', 'Banco Relacional de Dados', 200.00, '2010-05-10', 1, 2),
+('9780000000008', 'Engenharia de Software Moderna', 75.00, '2024-05-20', 4, 1);
+
+SELECT * FROM livro;
+
+-- Relacionando autores e livros
+INSERT INTO autor_livro (autor_codigo, livro_codigo) VALUES
+(1, 1), (2, 2), (1, 3), (2, 4), (1, 5), (2, 6), (1, 7), (2, 8);
+-- fim seed até a decima questão
+

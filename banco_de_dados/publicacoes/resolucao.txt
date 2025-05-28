@@ -1,0 +1,73 @@
+-- 1. Livros que possuam preços superiores a R$ 50,00.
+SELECT *
+FROM livro
+WHERE preco > 50;
+
+-- 2. Livros que possuam preços entre R$ 100,00 e R$ 200,00.
+SELECT *
+FROM livro
+WHERE preco BETWEEN 100 AND 200;
+
+SELECT *
+FROM livro
+WHERE preco >= 100 AND preco <= 200;
+
+-- 3. Livros cujos títulos possuam a palavra ‘Banco’.
+SELECT titulo
+FROM livro
+WHERE LOWER(titulo) LIKE '%banco%';
+
+-- 4. Livros cujos títulos iniciam com a palavra ‘Banco’.
+SELECT *
+FROM livro
+WHERE preco BETWEEN 100 AND 200;
+
+SELECT *
+FROM livro
+WHERE preco >= 100 AND preco <= 200;
+
+-- 3. Livros cujos títulos possuam a palavra ‘Banco’.
+SELECT titulo
+FROM livro
+WHERE LOWER(titulo) LIKE '%banco%';
+
+-- 4. Livros cujos títulos iniciam com a palavra ‘Banco’.
+SELECT titulo
+FROM livro
+WHERE LOWER(titulo) LIKE 'banco%';
+
+-- 5. Livros cujos títulos terminam com a palavra ‘Dados’.
+SELECT titulo
+FROM livro
+WHERE LOWER(titulo) LIKE '%dados';
+
+-- 6. Livros cujos títulos possuem a expressão ‘Banco de Dados’ ou ‘Bancos de Dados’.
+
+SELECT titulo
+FROM livro
+WHERE LOWER(titulo) LIKE '%banco de dados%'
+OR LOWER(titulo) LIKE '%bancos de dados%';
+
+-- 7. Livros que foram lançados há mais de 5 anos.
+
+SELECT *
+FROM livro
+WHERE dataLancamento < DATE_SUB(CURDATE(), INTERVAL 5 YEAR);
+
+-- 8. Livros que ainda não foram lançados, ou seja, com a data de lançamento nula.
+
+SELECT *
+FROM livro
+WHERE dataLancamento IS NULL;
+
+-- 9. Livros cujo assunto seja ‘Estruturas de Dados’.
+
+SELECT * 
+FROM livro
+JOIN assunto ON livro.assunto_codigo = assunto.codigo
+WHERE LOWER(assunto.descricao) LIKE'%estruturas de dados%';
+
+-- 10. Livros cujo assunto tenha código 1, 2 ou 3.
+
+SELECT * FROM livro
+WHERE assunto_codigo IN (1, 2, 3);
