@@ -143,9 +143,16 @@ valor final: {self.valor_final}"""
 
             dias_de_atraso = self.__calcular_dias_atrasados(self.data_vencimento, momento_pagamento)
             #dias_de_atraso = (momento_pagamento-self.data_vencimento).days  + 1
-            return dias_de_atraso
+            total = self.__calular_valor_final_atrasado(dias_de_atraso)
+            self.__valor_final = total
+            return self.__valor_final
         
         self.nome_do_pagador = nome_pagador
+    def __calular_valor_final_atrasado(self, dias_atrasados):
+        multa = self.valor_original * (2/100)
+        juros = (self.valor_original*(0.03)/100)*dias_atrasados
+        total = self.valor_original + multa + juros
+        return total
 
     def __calcular_dias_atrasados(self, vencimento:datetime, outra_data:datetime):
         return int(-(-(outra_data - vencimento).total_seconds()//(60*60*24)))
