@@ -1,0 +1,302 @@
+CREATE DATABASE empresa;
+
+USE empresa;
+
+CREATE TABLE empregados(
+	matr CHAR(6) PRIMARY KEY NOT NULL, -- matricula unica do empregado (pk)
+    nome VARCHAR(12) NOT NULL, -- primeiro nome
+    sobrenome VARCHAR(15) NOT NULL, -- sobrenome
+    dept CHAR(3), -- codigo de departamento do empregado (fk)
+    fone VARCHAR(14), -- numero de telefone
+    dataadm DATE, -- data de admissão
+    cargo CHAR(10), -- cargo do empregado
+    niveleduc DECIMAL, -- educação formal em anos
+    sexo CHAR(1), -- m = masc, f=fem
+    CHECK (LOWER(sexo) IN ("m", "f")),
+    datanasc DATE, -- data nascimento
+    salario DECIMAL(9,2), -- salário anual
+    bonus DECIMAL(9,2), -- bônus anual
+    comis DECIMAL(9,2) -- comissão anual
+);
+
+CREATE TABLE departamentos(
+	dcodigo CHAR(3) PRIMARY KEY, -- codigo unico do departamento (pk)
+    dnome VARCHAR(36) NOT NULL, -- nome do departamento
+    gerente CHAR(6) -- matricula do gerente (fk)
+);
+
+CREATE TABLE projetos(
+	pcodigo CHAR(6) PRIMARY KEY,
+    pnome VARCHAR(24) NOT NULL, -- nome do projeto
+    dcodigo CHAR(3) NOT NULL, -- codigo do departamento (fk)
+    resp CHAR(6)  NOT NULL, -- matrícula do responsável (fk)
+    equipe DECIMAL(5), -- númeo de empregados no projeto
+    dataini DATE, -- data de inicio
+    datafim DATE -- data fim do projeto
+);
+
+ALTER TABLE empregados
+	ADD CONSTRAINT fk_departamentos_dcodigo FOREIGN KEY (dept) REFERENCES departamentos(dcodigo);
+ALTER TABLE departamentos 
+	ADD CONSTRAINT fk_empregados_matr FOREIGN KEY (gerente) REFERENCES empregados(matr);
+ALTER TABLE projetos
+	ADD FOREIGN KEY (dcodigo) REFERENCES departamentos(dcodigo),
+	ADD FOREIGN KEY (resp) REFERENCES empregados(matr);
+
+
+1.      Mostre o sobrenome, primeiro nome, departamentos data de nascimento, 
+data de admissão e salário de todos os empregados que ganham mais que $30.000 por ano.
+
+INSERT INTO departamentos
+	(dcodigo, dnome)
+VALUES 
+('001', 'NomeDepartamento1'),
+('002', 'NomeDepartamento2'),
+('003', 'NomeDepartamento3');
+
+
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario)
+VALUES
+('000001', 'Nome1', 'Sobrenome1', '001', 'gerente', 'm', '2000-01-01', '30000' ),
+('000002', 'Nome2', 'Sobrenome2', '001', 'operario', 'm', '2000-01-01', '29000' );
+
+
+SELECT nome, sobrenome, d.dnome AS departamento, datanasc AS data_nascimento, dataadm AS data_de_admissao, salario
+FROM empregados e
+JOIN departamentos d ON e.dept = d.dcodigo
+WHERE e.salario >= 30000;
+
+2.      Liste todas as informações de qualquer departamento cujo gerente seja desconhecido.
+
+SELECT * FROM departamentos WHERE gerente IS NULL;
+
+3.Mostre o sobrenome, primeiro nome, departamento, data de nascimento, 
+data de admissão e salário de todos os empregados que ganhem menos de $20.000 por ano. 
+Classifique o resultado pelo sobrenome e primeiro nome;
+
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario)
+VALUES
+('000003', 'Nome3', 'Sobrenome3', '003', 'operario', 'm', '2000-01-01', '10000' );
+
+SELECT nome, sobrenome, d.dnome AS departamento, datanasc AS data_nascimento, dataadm AS data_de_admissao, salario
+FROM empregados e
+JOIN departamentos d ON e.dept = d.dcodigo
+WHERE e.salario <= 20000
+ORDER BY sobrenome, nome;
+
+4. Liste tudo sobre os departamentos subordinados ao departamento A00.
+
+INSERT INTO departamentos
+	(dcodigo, dnome)
+VALUES 
+('A00', 'NomeDepartamento4');
+
+SELECT *
+FROM departamentos
+WHERE dcodigo = 'A00';
+
+5.Liste o código e o nome dos departamento que apresentam “SERVIÇO” compondo seu nome.
+
+INSERT INTO departamentos
+	(dcodigo, dnome)
+VALUES 
+('004', 'SERVIÇO');
+
+SELECT dcodigo AS codigo, dnome AS nome
+FROM departamentos
+WHERE dnome = 'SERVIÇO';
+
+6.Mostre a matricula, sobrenome, departamento e telefone dos empregados cujo código de departamento estejam compreendidos entre D11 e D21 (inclusive).
+
+INSERT INTO departamentos
+	(dcodigo, dnome)
+VALUES 
+('D11', 'NomeDepartamentoD11'),
+('D15', 'NomeDepartamentoD15'),
+('D21', 'NomeDepartamentoD21');
+
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario, fone)
+VALUES
+('000004', 'Nome4', 'Sobrenome4', 'D11', 'operario', 'm', '2000-01-01', '10000', '(99)99999-9999'),
+('000005', 'Nome5', 'Sobrenome5', 'D15', 'operario', 'm', '2000-01-01', '10000', '(99)99999-9999'),
+('000006', 'Nome6', 'Sobrenome6', 'D21', 'operario', 'm', '2000-01-01', '10000', '(99)99999-9999');
+
+SELECT matr AS matricula, sobrenome, dept AS departamento, fone AS contato
+FROM empregados e
+JOIN departamentos d ON d.dcodigo = e.dept
+WHERE e.dept BETWEEN 'D11' AND 'D21';
+
+7.Produza uma lista dos empregados nos departamentos B01, C01 e D01, mostrando o sobrenome,
+ departamento e rendimento (salário + comissão) Liste a saída em ordem descendente de rendimento 
+  dentro de cada departamento.
+
+SELECT nome, sobrenome, dept AS departamento, (salario+comis) as redimento FROM empregados
+WHERE dept IN ("B01","C01","D01");
+
+INSERT INTO departamentos (dcodigo, dnome) VALUES 
+	('B01', 'portaria'),
+    ('C01', 'telemarketing'),
+    ('D01', 'rh');
+
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario, fone, comis)
+VALUES
+('000007', 'Nome7', 'Sobrenome7', 'B01', 'operario', 'm', '2000-01-01', '10000', '(99)99999-9999', '1000'),
+('000008', 'Nome8', 'Sobrenome8', 'C01', 'operario', 'm', '2000-01-01', '20000', '(99)99999-9999', '1000'),
+('000009', 'Nome9', 'Sobrenom9', 'D01', 'operario', 'm', '2000-01-01', '30000', '(99)99999-9999', '1000');
+
+8. Mostre o sobrenome, salário anual e departamento dos empregados com salário mensal maior que $3000.
+Classifique a lista pelo sobrenome.
+
+SELECT nome, sobrenome, salario ,dept as departamento
+FROM empregados
+WHERE salario > 3000
+ORDER BY sobrenome; 
+
+
+-- 9.      Produza uma lista de todos os empregados cujo departamento somente com “E”. 
+-- Mostre a matricula, primeiro nome e sobrenome. Classifique pelo sobrenome.
+
+SELECT matr, nome, sobrenome, dept
+FROM empregados
+WHERE dept LIKE 'E%';
+
+10)
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario)
+VALUES
+('000010', 'João', 'Silva', '001', 'operario', 'm', '2020-01-01', 18000), -- salário mensal = 1500
+('000011', 'Carlos', 'Santos', '001', 'analista', 'm', '2019-05-01', 35000); -- salário mensal > 1600
+
+SELECT matr, sobrenome, salario / 12 AS salario_mensal
+FROM empregados
+WHERE sexo = 'm' AND salario / 12 < 1600
+ORDER BY salario_mensal DESC;
+
+
+11)
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario, bonus, comis)
+VALUES
+('000012', 'Ana', 'Pereira', '002', 'REPVENDA', 'f', '2021-02-15', 24000, 3000, 6000);
+
+SELECT nome, 
+       ROUND((comis / (salario + IFNULL(bonus, 0) + IFNULL(comis, 0))) * 100, 2) AS porcentagem_comissao
+FROM empregados
+WHERE LOWER(cargo) = 'repvenda';
+
+
+12)
+INSERT INTO departamentos (dcodigo, dnome) VALUES
+('E01', 'Planejamento Estratégico'),
+('E02', 'Planejamento Orçamentário'),
+('E01A', 'Execução de Planejamento');
+
+-- Um subordinado com prefixo “E01”:
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario)
+VALUES
+('000013', 'Lucas', 'Souza', 'E01A', 'analista', 'm', '2020-03-01', 25000);
+
+SELECT * 
+FROM departamentos
+WHERE dcodigo = 'E01' OR dcodigo LIKE 'E01%';
+
+13)
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario, niveleduc)
+VALUES
+('000014', 'Marcos', 'Lima', '003', 'gerente', 'm', '2018-04-01', 45000, 15),
+('000015', 'Paula', 'Ferraz', '003', 'gerente', 'f', '2018-04-01', 42000, 17);
+
+SELECT sobrenome, salario, cargo, niveleduc
+FROM empregados
+WHERE salario > 40000 AND LOWER(cargo) = 'gerente' AND niveleduc < 16;
+
+
+14)
+SELECT 
+	SUM(salario) AS soma_salarios,
+    AVG(salario) AS salario_medio,
+    MIN(salario) AS salario_minimo,
+    MAX(salario) AS salario_maximo
+FROM empregados;
+
+SELECT sobrenome
+FROM empregados
+ORDER BY sobrenome ASC
+LIMIT 1;
+
+15)
+SELECT sobrenome
+FROM empregados
+ORDER BY sobrenome ASC
+LIMIT 1;
+
+16)
+SELECT COUNT(DISTINCT dept) AS departamentos_com_empregados
+FROM empregados;
+
+17)
+
+SELECT cargo, AVG(salario) AS media_salarial
+FROM empregados
+GROUP BY cargo;
+
+
+18)
+
+SELECT cargo, AVG(salario) AS media_salarial
+FROM empregados
+GROUP BY cargo
+HAVING AVG(salario) > 35000;
+
+
+19)
+
+INSERT INTO departamentos (dcodigo, dnome)
+VALUES ('F01', 'PLANEJAMENTO URBANO');
+
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario)
+VALUES
+('000016', 'Bruna', 'Oliveira', 'F01', 'analista', 'f', '2022-01-01', 27000);
+
+SELECT e.sobrenome, e.cargo
+FROM empregados e
+JOIN departamentos d ON e.dept = d.dcodigo
+WHERE d.dnome LIKE '%PLAN%';
+
+
+20)
+
+INSERT INTO empregados
+	(matr, nome, sobrenome, dept, cargo, sexo, dataadm, salario)
+VALUES
+('000017', 'Mark', 'Adamson', 'Z01', 'analista', 'm', '2020-01-01', 30000),
+('000018', 'Julia', 'Costa', 'Z01', 'operario', 'f', '2021-01-01', 20000);
+
+SELECT nome, sobrenome
+FROM empregados
+WHERE dept = (
+	SELECT dept FROM empregados WHERE sobrenome = 'Adamson' LIMIT 1
+) AND sobrenome != 'Adamson';
+
+
+21)
+SELECT e.dept AS departamento, 
+       d.dnome AS nome_departamento,
+       COUNT(*) AS qtd_empregados,
+       AVG(salario) AS media_salarial
+FROM empregados e
+JOIN departamentos d ON e.dept = d.dcodigo
+WHERE LOWER(cargo) != 'atendente'
+GROUP BY e.dept, d.dnome
+HAVING COUNT(*) >= 4
+ORDER BY qtd_empregados DESC;
+
+
+
