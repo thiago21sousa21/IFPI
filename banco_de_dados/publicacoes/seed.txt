@@ -52,5 +52,9 @@ INSERT INTO livro (isbn, titulo, preco, dataLancamento, assunto_codigo, editora_
 ('9780000000016', 'Estruturas de Dados com Python', 105.00, '2010-09-09', 2, 2);
 
 -- fim até o 20
+INSERT INTO autor (nome, passaporte, dataNascimento, nacionalidade_codigo) 
+VALUES ('Antônio Velho', 'EF7890', '1915-01-01', 1);
+-- fim até 40
+
 
 
