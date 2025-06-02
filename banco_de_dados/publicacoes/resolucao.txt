@@ -293,3 +293,76 @@ SELECT l.titulo, e.nome AS editora, a.descricao AS assunto
 FROM livro l
 JOIN editora e ON l.editora_codigo = e.codigo
 JOIN assunto a ON l.assunto_codigo = a.codigo;
+
+-- 50. Editoras e títulos dos livros lançados pela editora, ordenado por nome da editora e título do livro.
+SELECT e.nome AS editora, l.titulo
+FROM livro l
+JOIN editora e ON l.editora_codigo = e.codigo
+WHERE l.dataLancamento IS NOT NULL
+ORDER BY e.nome, l.titulo;
+
+-- 51. Editoras cadastradas e, para as que têm livros, também o título, ordenado por nome da editora e título.
+SELECT e.nome AS editora, l.titulo
+FROM editora e
+LEFT JOIN livro l ON l.editora_codigo = e.codigo
+ORDER BY e.nome, l.titulo;
+
+-- 52. Assuntos com os títulos dos livros, ordenados pela descrição do assunto.
+SELECT a.descricao AS assunto, l.titulo
+FROM assunto a
+JOIN livro l ON l.assunto_codigo = a.codigo
+ORDER BY a.descricao, l.titulo;
+
+-- 53. Títulos e editoras, relacionando o livro à editora quando existir.
+SELECT l.titulo, e.nome AS editora
+FROM livro l
+LEFT JOIN editora e ON l.editora_codigo = e.codigo;
+
+-- 54. Descrição dos assuntos e títulos dos livros. Quando não houver livros, mostrar ‘Sem publicações’.
+SELECT a.descricao AS assunto, 
+       COALESCE(l.titulo, 'Sem publicações') AS titulo
+FROM assunto a
+LEFT JOIN livro l ON l.assunto_codigo = a.codigo
+ORDER BY a.descricao;
+
+-- 55. Nomes dos autores e os livros de sua autoria, ordenado pelo nome do autor.
+SELECT au.nome AS autor, l.titulo
+FROM autor au
+JOIN autor_livro al ON al.autor_codigo = au.codigo
+JOIN livro l ON l.codigo = al.livro_codigo
+ORDER BY au.nome, l.titulo;
+
+-- 56. Editoras que publicaram livros do autor ‘Machado de Assis’.
+SELECT DISTINCT e.nome AS editora
+FROM autor a
+JOIN autor_livro al ON al.autor_codigo = a.codigo
+JOIN livro l ON l.codigo = al.livro_codigo
+JOIN editora e ON e.codigo = l.editora_codigo
+WHERE a.nome = 'Machado de Assis';
+
+-- 57. Quantidade de livros lançados por autores cujo nome contém ‘Luis’.
+SELECT COUNT(DISTINCT l.codigo) AS quantidade
+FROM autor a
+JOIN autor_livro al ON al.autor_codigo = a.codigo
+JOIN livro l ON l.codigo = al.livro_codigo
+WHERE a.nome ILIKE '%luis%' AND l.dataLancamento IS NOT NULL;
+
+-- 58. Preço do livro mais caro da editora ‘Books Editora’ sobre banco de dados.
+SELECT MAX(l.preco) AS preco_mais_caro
+FROM livro l
+JOIN editora e ON e.codigo = l.editora_codigo
+JOIN assunto a ON a.codigo = l.assunto_codigo
+WHERE e.nome = 'Books Editora' AND a.descricao ILIKE '%banco de dados%';
+
+-- 59. Editoras que não publicaram nenhum livro.
+SELECT e.nome
+FROM editora e
+LEFT JOIN livro l ON l.editora_codigo = e.codigo
+WHERE l.codigo IS NULL;
+
+-- 60. Título do livro e nome da editora para livros com preço inferior a R$ 50,00.
+SELECT l.titulo, e.nome AS editora
+FROM livro l
+JOIN editora e ON e.codigo = l.editora_codigo
+WHERE l.preco < 50.00;
+
