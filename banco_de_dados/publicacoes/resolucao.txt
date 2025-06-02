@@ -234,3 +234,62 @@ WHERE assunto_codigo = 1 AND dataLancamento IS NOT NULL;
 -- 40. Quantidade de autores distintos que estão associados a livros.
 SELECT COUNT(DISTINCT autor_codigo) AS autores_distintos
 FROM autor_livro;
+
+-- 41. Título, assunto e preço, ordenado por assunto (crescente) e preço (decrescente).
+SELECT l.titulo, a.descricao AS assunto, l.preco
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+ORDER BY a.descricao ASC, l.preco DESC;
+
+-- 42. Editoras ordenadas alfabeticamente. A coluna de nomes deve ter o título ‘Editora’.
+SELECT nome AS "Editora"
+FROM editora
+ORDER BY nome ASC;
+
+-- 43. Preços e os títulos dos livros, em ordem decrescente de preço.
+SELECT preco, titulo
+FROM livro
+ORDER BY preco DESC;
+
+-- 44. Editoras que já publicaram livros, sem repetições.
+SELECT DISTINCT e.nome
+FROM livro l
+JOIN editora e ON l.editora_codigo = e.codigo;
+
+-- 45. Autores brasileiros com mês e ano de nascimento, por ordem decrescente de idade e crescente de nome.
+SELECT a.nome, MONTH(a.dataNascimento) AS mes_nascimento, YEAR(a.dataNascimento) AS ano_nascimento
+FROM autor a
+JOIN nacionalidade n ON a.nacionalidade_codigo = n.codigo
+WHERE n.pais = 'Brasil'
+ORDER BY a.dataNascimento ASC, a.nome ASC;
+
+-- 46. Editora (nome), assunto (código) e quantidade de livros por editora e assunto, em ordem decrescente de quantidade.
+SELECT e.nome AS editora, l.assunto_codigo AS assunto, COUNT(*) AS quantidade
+FROM livro l
+JOIN editora e ON l.editora_codigo = e.codigo
+GROUP BY e.nome, l.assunto_codigo
+ORDER BY quantidade DESC;
+
+-- 46. Editora (nome), assunto (código) e quantidade de livros por editora e assunto, em ordem decrescente de quantidade.
+SELECT e.nome AS editora, l.assunto_codigo AS assunto, COUNT(*) AS quantidade
+FROM livro l
+JOIN editora e ON l.editora_codigo = e.codigo
+GROUP BY e.nome, l.assunto_codigo
+ORDER BY quantidade DESC;
+
+-- 47. Títulos cujo comprimento seja superior a 15 caracteres.
+SELECT titulo
+FROM livro
+WHERE LENGTH(titulo) > 15;
+
+-- 48. Títulos dos livros já lançados e a descrição dos seus assuntos.
+SELECT l.titulo, a.descricao AS assunto
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+WHERE l.dataLancamento IS NOT NULL;
+
+-- 49. Título do livro, nome da editora que o publicou e a descrição do assunto.
+SELECT l.titulo, e.nome AS editora, a.descricao AS assunto
+FROM livro l
+JOIN editora e ON l.editora_codigo = e.codigo
+JOIN assunto a ON l.assunto_codigo = a.codigo;
