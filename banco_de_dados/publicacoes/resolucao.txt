@@ -71,3 +71,50 @@ WHERE LOWER(assunto.descricao) LIKE'%estruturas de dados%';
 
 SELECT * FROM livro
 WHERE assunto_codigo IN (1, 2, 3);
+
+-- 11. Quantidade de livros
+SELECT COUNT(*) AS quantidade_livros FROM livro;
+
+-- 12. Quantidade de livros ainda não lançados (data nula)
+SELECT COUNT(*) AS livros_nao_lancados
+FROM livro
+WHERE dataLancamento IS NULL;
+
+-- 13. Soma dos preços dos livros
+SELECT SUM(preco) AS soma_precos FROM livro;
+
+-- 14. Média dos preços dos livros
+SELECT AVG(preco) AS media_precos FROM livro;
+
+-- 15. Maior preço dos livros
+SELECT MAX(preco) AS maior_preco FROM livro;
+
+-- 16. Menor preço dos livros
+SELECT MIN(preco) AS menor_preco FROM livro;
+
+-- 17. Preço médio dos livros para cada assunto
+SELECT a.descricao AS assunto, ROUND(AVG(l.preco), 2) AS preco_medio
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+GROUP BY a.descricao;
+
+-- 18. Quantidade de livros para cada assunto
+SELECT a.descricao AS assunto, COUNT(*) AS quantidade
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+GROUP BY a.descricao;
+
+-- 19. Preço do livro mais caro de cada assunto (somente os já lançados)
+SELECT a.descricao AS assunto, MAX(l.preco) AS preco_maximo
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+WHERE l.dataLancamento IS NOT NULL
+GROUP BY a.descricao;
+
+-- 20. Quantidade de livros lançados por editora
+SELECT e.nome AS editora, COUNT(*) AS livros_lancados
+FROM livro l
+JOIN editora e ON l.editora_codigo = e.codigo
+WHERE l.dataLancamento IS NOT NULL
+GROUP BY e.nome;
+
