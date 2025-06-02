@@ -118,3 +118,65 @@ JOIN editora e ON l.editora_codigo = e.codigo
 WHERE l.dataLancamento IS NOT NULL
 GROUP BY e.nome;
 
+-- 21. Assuntos cujo preço médio dos livros ultrapassa R$ 50,00.
+SELECT a.descricao AS assunto, AVG(l.preco) AS media_preco
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+GROUP BY a.descricao
+HAVING AVG(l.preco) > 50.00;
+
+-- 22. Assuntos que possuem pelo menos 2 livros.
+SELECT a.descricao AS assunto, COUNT(*) AS quantidade
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+GROUP BY a.descricao
+HAVING COUNT(*) >= 2;
+
+-- 23. Assuntos que possuem pelo menos 2 livros já lançados.
+SELECT a.descricao AS assunto, COUNT(*) AS quantidade_lancados
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+WHERE l.dataLancamento IS NOT NULL
+GROUP BY a.descricao
+HAVING COUNT(*) >= 2;
+
+-- 24. Quantidade de livros lançados por assunto.
+SELECT a.descricao AS assunto, COUNT(*) AS livros_lancados
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+WHERE l.dataLancamento IS NOT NULL
+GROUP BY a.descricao;
+
+-- 25. Nome e passaporte dos autores que possuem a palavra ‘João’ no nome.
+SELECT nome, passaporte
+FROM autor
+WHERE nome LIKE '%João%';
+
+-- 26. Nome e passaporte dos autores que nasceram após 1° de janeiro de 1970.
+SELECT nome, passaporte
+FROM autor
+WHERE dataNascimento > '1970-01-01';
+
+-- 27. Nome e passaporte dos autores que não são brasileiros.
+SELECT a.nome, a.passaporte
+FROM autor a
+JOIN nacionalidade n ON a.nacionalidade_codigo = n.codigo
+WHERE n.pais != 'Brasil';
+
+-- 28. Quantidade de autores.
+SELECT COUNT(*) AS quantidade_autores FROM autor;
+
+-- 29. Quantidade média de autores dos livros.
+SELECT AVG(qtd_autores) AS media_autores_por_livro
+FROM (
+    SELECT COUNT(*) AS qtd_autores
+    FROM autor_livro
+    GROUP BY livro_codigo
+) AS subconsulta;
+
+-- 30. Livros que possuem ao menos 2 autores.
+SELECT l.titulo, COUNT(al.autor_codigo) AS qtd_autores
+FROM livro l
+JOIN autor_livro al ON l.codigo = al.livro_codigo
+GROUP BY l.codigo, l.titulo
+HAVING COUNT(al.autor_codigo) >= 2;
