@@ -366,3 +366,145 @@ FROM livro l
 JOIN editora e ON e.codigo = l.editora_codigo
 WHERE l.preco < 50.00;
 
+-- 61. Nome e passaporte do autor brasileiro nascido antes de 1º de janeiro de 1950, com seus livros.
+SELECT a.nome, a.passaporte, l.titulo
+FROM autor a
+JOIN autor_livro al ON al.autor_codigo = a.codigo
+JOIN livro l ON l.codigo = al.livro_codigo
+JOIN nacionalidade n ON a.nacionalidade_codigo = n.codigo
+WHERE n.pais LIKE '%brasil%'
+  AND a.dataNascimento < '1950-01-01'
+ORDER BY a.nome, l.titulo;
+
+-- 62. Nome e passaporte do autor e o preço máximo dos livros de sua autoria.
+
+SELECT a.nome, a.passaporte, MAX(l.preco) AS preco_maximo
+FROM autor a
+JOIN autor_livro al ON al.autor_codigo = a.codigo
+JOIN livro l ON l.codigo = al.livro_codigo
+GROUP BY a.nome, a.passaporte
+ORDER BY a.nome;
+
+-- 63. Nome do autor e nome da editora que já lançaram pelo menos 2 livros.
+
+SELECT a.nome AS autor, e.nome AS editora
+FROM autor a
+JOIN autor_livro al ON al.autor_codigo = a.codigo
+JOIN livro l ON l.codigo = al.livro_codigo
+JOIN editora e ON e.codigo = l.editora_codigo
+GROUP BY a.nome, e.nome
+HAVING COUNT(DISTINCT l.codigo) >= 2
+ORDER BY a.nome, e.nome;
+
+-- 64. Descrição do assunto referenciado em pelo menos 10 livros.
+
+SELECT a.descricao
+FROM assunto a
+JOIN livro l ON l.assunto_codigo = a.codigo
+GROUP BY a.descricao
+HAVING COUNT(l.codigo) >= 10;
+
+
+-- 65. Nomes das editoras que possuem livros lançados.
+SELECT DISTINCT e.nome
+FROM editora e
+JOIN livro l ON l.editora_codigo = e.codigo
+WHERE l.dataLancamento IS NOT NULL;
+
+
+--  66. Assuntos que não tiveram livros lançados.
+
+SELECT a.descricao
+FROM assunto a
+LEFT JOIN livro l ON l.assunto_codigo = a.codigo AND l.dataLancamento IS NOT NULL
+WHERE l.codigo IS NULL;
+
+-- 67. Descrição dos assuntos e quantidade de livros lançados de cada um.
+SELECT a.descricao, COUNT(l.codigo) AS quantidade
+FROM assunto a
+LEFT JOIN livro l ON l.assunto_codigo = a.codigo AND l.dataLancamento IS NOT NULL
+GROUP BY a.descricao
+ORDER BY a.descricao;
+
+-- 68. Nome das editoras e o preço médio dos livros de cada uma.
+SELECT e.nome AS editora, ROUND(AVG(l.preco), 2) AS preco_medio
+FROM editora e
+JOIN livro l ON l.editora_codigo = e.codigo
+GROUP BY e.nome
+ORDER BY e.nome;
+
+-- 69. Nome das editoras e os livros das editoras que lançaram ao menos 2 livros.
+SELECT e.nome AS editora, l.titulo
+FROM editora e
+JOIN livro l ON l.editora_codigo = e.codigo
+WHERE e.codigo IN (
+    SELECT editora_codigo
+    FROM livro
+    WHERE dataLancamento IS NOT NULL
+    GROUP BY editora_codigo
+    HAVING COUNT(*) >= 2
+)
+ORDER BY e.nome, l.titulo;
+
+-- 70. Títulos dos livros dos assuntos com preço médio superior a R$ 40,00, com os respectivos assuntos.
+SELECT l.titulo, a.descricao AS assunto
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+WHERE a.codigo IN (
+    SELECT assunto_codigo
+    FROM livro
+    GROUP BY assunto_codigo
+    HAVING AVG(preco) > 40
+)
+ORDER BY a.descricao, l.titulo;
+
+-- 70. Títulos dos livros dos assuntos cujo preço médio é superior a R$ 40,00, com os respectivos assuntos.
+SELECT l.titulo, a.descricao AS assunto
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+WHERE l.assunto_codigo IN (
+    SELECT assunto_codigo
+    FROM livro
+    GROUP BY assunto_codigo
+    HAVING AVG(preco) > 40
+)
+ORDER BY a.descricao, l.titulo;
+
+-- 71. Títulos dos livros cujo assunto é ‘Banco de Dados’ ou lançados por editoras que contenham ‘Books’.
+SELECT l.titulo
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+JOIN editora e ON l.editora_codigo = e.codigo
+WHERE a.descricao = 'Banco de Dados'
+   OR e.nome LIKE '%Books%';
+
+-- 72. Títulos dos livros cujo assunto é ‘Banco de Dados’ e lançados por editoras que contenham ‘Books’.
+SELECT l.titulo
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+JOIN editora e ON l.editora_codigo = e.codigo
+WHERE a.descricao = 'Banco de Dados'
+  AND e.nome LIKE '%Books%';
+
+-- 73. Títulos dos livros cujo assunto é ‘Banco de Dados’ e que não foram lançados por editoras com ‘Books’.
+SELECT l.titulo
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+JOIN editora e ON l.editora_codigo = e.codigo
+WHERE a.descricao = 'Banco de Dados'
+  AND e.nome NOT LIKE '%Books%';
+
+-- **74. Títulos dos livros que não foram lançados por editoras com ‘Books’ cujo assunto é ‘Banco de Dados’.
+SELECT l.titulo
+FROM livro l
+JOIN assunto a ON l.assunto_codigo = a.codigo
+JOIN editora e ON l.editora_codigo = e.codigo
+WHERE a.descricao = 'Banco de Dados'
+  AND e.nome NOT LIKE '%Books%';
+
+-- 75. Excluir editoras que não publicaram livros.
+DELETE FROM editora
+WHERE codigo NOT IN (
+    SELECT DISTINCT editora_codigo FROM livro
+);
+
