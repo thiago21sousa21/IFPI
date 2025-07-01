@@ -148,3 +148,7 @@ print(pessoa2)
 pessoa.morrer()
 print(pessoa)
 print(pessoa2)
+
+# agora vou criar testes usando pytest para verificar se as funções estão funcionando corretamente
+
+# Para rodar os testes, você pode usar o comando:
