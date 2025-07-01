@@ -63,11 +63,11 @@ class Pessoa:
         return self.__pai_adotivo
 
     def verificar_instancia(self, classe):
-        if not isinstance(Pessoa, classe):
+        if not isinstance(classe, Pessoa):
             raise TypeError(f"Objeto não é uma instância de Pessoa")
 
     def casar(self,conjuge):
-        self.verificar_instancia(conjuge, Pessoa)
+        self.verificar_instancia(conjuge)
         pode_casar = self.__estado == "vivo" and self.__est_civil != "casado" and conjuge.__estado == "vivo" and conjuge.__est_civil != "casado"
         if pode_casar:
             self.__conjuge = conjuge
@@ -104,7 +104,7 @@ class Pessoa:
 
 
     def adoção(self,mãe): #condição: Pessoa ser órfã e mãe tem que ser de maior
-        self.verificar_instancia(mãe, Pessoa)
+        self.verificar_instancia(mãe)
         if self.__mãe is not None:
             raise ValueError("Pessoa já tem mãe biológica.")
         if self.__pai is not None:
@@ -136,3 +136,15 @@ class Pessoa:
         Pai Adotivo: {self.__pai_adotivo.nome if self.__pai_adotivo else "Não informado"}
         Cônjuge: {self.__conjuge.nome if self.__conjuge else "Não informado"}
         """
+
+
+pessoa = Pessoa("Thiago", 20, 70, 1.75, "Masculino")
+print(pessoa)
+pessoa2 = Pessoa("Maria", 22, 60, 1.65, "Feminino")
+print(pessoa2)
+pessoa.casar(pessoa2)
+print(pessoa)
+print(pessoa2)
+pessoa.morrer()
+print(pessoa)
+print(pessoa2)
