@@ -65,5 +65,6 @@ def test_listar_mesas_ocupadas(setup_restaurante, capsys):
     restaurante.listar_mesas_ocupadas()
     output2 = capsys.readouterr().out
     assert "Mesas ocupadas:" in output2
+    print(output2)
     assert "- Mesa 7" in output2
     assert "- Mesa 5" not in output2

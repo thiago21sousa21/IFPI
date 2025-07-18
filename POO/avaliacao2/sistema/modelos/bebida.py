@@ -1,30 +1,29 @@
-from .item_menu import ItemMenu
+from sistema.modelos.item_menu import ItemMenu
 
 class Bebida(ItemMenu):
     """
-    Subclasse que representa uma bebida, com um tamanho específico.
+    Subclasse encapsulada para Bebida. 
     """
-    def __init__(self, nome, preco, tamanho):
+    def __init__(self, nome: str, preco: float, tamanho: str):
         super().__init__(nome, preco)
-        # Validação do tamanho da bebida
-        if tamanho.upper() not in ['P', 'M', 'G']:
+        tamanho_upper = tamanho.upper()
+        if tamanho_upper not in ['P', 'M', 'G']:
             raise ValueError("Tamanho inválido. Use 'P', 'M' ou 'G'.")
-        self.tamanho = tamanho.upper()
+        self._tamanho = tamanho_upper 
 
-    def calcular_preco(self):
-        """
-        Sobrescreve o método para adicionar um custo extra com base no tamanho. 
-        - Tamanho 'M' tem um acréscimo de R$ 2.00
-        - Tamanho 'G' tem um acréscimo de R$ 4.00
-        """
-        preco_final = self.preco
-        if self.tamanho == 'M':
+    @property
+    def tamanho(self) -> str:
+        return self._tamanho
+
+    def calcular_preco(self) -> float: 
+        """Sobrescreve o método para adicionar custo com base no tamanho."""
+        preco_final = self._preco
+        if self._tamanho == 'M':
             preco_final += 2.00
-        elif self.tamanho == 'G':
-            preco_final += 4.00 # Exemplo de variação de preço
+        elif self._tamanho == 'G':
+            preco_final += 4.00
         return preco_final
 
-    def __str__(self):
-        # Gera uma representação em string para a bebida, mostrando o preço calculado.
+    def __str__(self) -> str:
         preco_calculado = self.calcular_preco()
-        return f"Bebida: {self.nome} (Tamanho: {self.tamanho}) - R$ {preco_calculado:.2f}"
+        return f"Bebida: {self._nome} (Tamanho: {self._tamanho}) - R$ {preco_calculado:.2f}"

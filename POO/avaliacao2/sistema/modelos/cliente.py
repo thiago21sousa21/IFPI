@@ -1,9 +1,13 @@
 class Cliente:
     """
-    Representa um cliente do restaurante.
+    Representa um cliente com seus dados encapsulados.
     """
-    def __init__(self, nome):
-        self.nome = nome
+    def __init__(self, nome: str):
+        self._nome = nome
 
-    def __str__(self):
-        return self.nome
+    @property
+    def nome(self) -> str:
+        return self._nome
+
+    def __str__(self) -> str:
+        return self._nome

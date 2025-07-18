@@ -1,17 +1,22 @@
 class ItemMenu:
     """
-    Superclasse que representa um item genérico do cardápio. 
+    Superclasse encapsulada para um item do cardápio.
     """
-    def __init__(self, nome, preco):
-        self.nome = nome
-        self.preco = preco
+    def __init__(self, nome: str, preco: float):
+        self._nome = nome
+        self._preco = preco
 
-    def calcular_preco(self):
-        """
-        Retorna o preço base do item.
-        Este método será sobrescrito pelas subclasses. 
-        """
-        return self.preco
+    @property
+    def nome(self) -> str:
+        return self._nome
 
-    def __str__(self):
-        return f"{self.nome} (R$ {self.preco:.2f})"
+    @property
+    def preco(self) -> float:
+        return self._preco
+
+    def calcular_preco(self) -> float:
+        """Retorna o preço base. Será sobrescrito nas subclasses."""
+        return self._preco
+
+    def __str__(self) -> str:
+        return f"{self._nome} (R$ {self._preco:.2f})"
