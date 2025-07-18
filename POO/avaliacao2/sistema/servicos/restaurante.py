@@ -3,7 +3,7 @@ from sistema.modelos.item_menu import ItemMenu
 
 class Restaurante:
     """
-    [cite_start]Representa o restaurante com suas coleções encapsuladas. [cite: 9]
+    Representa o restaurante com suas coleções encapsuladas. [cite: 9]
     """
     def __init__(self, nome: str):
         self._nome = nome
