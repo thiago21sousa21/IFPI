@@ -8,7 +8,7 @@ from sistema.servicos.mesa import Mesa
 
 if __name__ == "__main__":
     print("=====================================================")
-    print("🚀 INICIANDO SIMULAÇÃO DO SISTEMA DO RESTAURANTE 🚀")
+    print("  INICIANDO SIMULAÇÃO DO SISTEMA DO RESTAURANTE ")
     print("=====================================================\n")
 
     # --- 1. Configurando o Restaurante e Cardápio ---
@@ -90,5 +90,5 @@ if __name__ == "__main__":
     restaurante.listar_mesas_ocupadas()
 
     print("\n=====================================================")
-    print("✅ SIMULAÇÃO CONCLUÍDA ✅")
+    print("   SIMULAÇÃO CONCLUÍDA  ")
     print("=====================================================")

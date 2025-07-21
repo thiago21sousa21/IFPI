@@ -45,7 +45,7 @@ class Mesa:
     def calcular_total(self) -> float:
         """
         Calcula o valor total da conta da mesa somando o preço de todos os itens
-        em todos os pedidos. [cite: 14, 31]
+        em todos os pedidos. 
         """
         total = 0.0
         # Itera sobre a lista interna de pedidos
@@ -59,7 +59,7 @@ class Mesa:
     def imprimir_conta_detalhada(self):
         """
         Método polimórfico que imprime um resumo detalhado da conta,
-        agrupando os itens por cliente e mostrando o total a pagar. [cite: 45]
+        agrupando os itens por cliente e mostrando o total a pagar.
         """
         print(f"\nResumo da mesa {self._numero}:")
         if not self._pedidos:

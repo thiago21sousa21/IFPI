@@ -3,7 +3,7 @@ from sistema.modelos.cliente import Cliente
 
 class Pedido:
     """
-    [cite_start]Representa um pedido com cliente e itens encapsulados. 
+    Representa um pedido com cliente e itens encapsulados. 
     """
     def __init__(self, cliente: Cliente):
         self._cliente = cliente
