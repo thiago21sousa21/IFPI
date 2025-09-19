@@ -7,6 +7,7 @@
 #primeiro vamos gerar uma letra aleatoria e depois vamos fazer uma lista com 30 dessas letras
 from random import randint
 import os
+from pprint import pprint
 
 limpar_terminal = lambda: os.system("cls" if os.name=="nt" else "clear")
 gerar_letra = lambda: 'ABCDE'[randint(0, 4)]
@@ -30,4 +31,4 @@ if __name__ == "__main__":
     alunos = gerar_alunos(5)
     print(alunos)
     alunos_com_acerto = conferir_resltado(gabarito_correto,alunos)
-    print(alunos_com_acerto)
+    pprint(alunos_com_acerto)

@@ -4,6 +4,7 @@
 
 from random import randint
 import os
+from pprint import pprint
 
 criar_lista = lambda qnt: [randint(-10, 10) for _ in range(qnt)]
 limpar_terminal = lambda : os.system("cls" if os.name == "nt" else "clear")
@@ -29,4 +30,4 @@ if __name__ == "__main__":
     lista1 = criar_lista(5)
     lista2 = criar_lista(10)
     lista_concatenada = minha_soma_de_lista(lista1, lista2)
-    print(f"A lista 1 é:\n {lista1}\n A lista 2 é:\n {lista2}\n A lista concatenada é:\n{lista_concatenada}")
+    pprint(f"A lista 1 é:\n {lista1}\n A lista 2 é:\n {lista2}\n A lista concatenada é:\n{lista_concatenada}")
