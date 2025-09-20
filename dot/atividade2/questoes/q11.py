@@ -12,6 +12,15 @@ import os
 opcoes = list(range(4))
 nomes = []
 
+def cor(estilo=0, texto=0, fundo=0):
+    codigos = []
+    if estilo: codigos.append(str(estilo))
+    if texto: codigos.append(str(texto))
+    if fundo: codigos.append(str(fundo))
+    if not codigos:  # nenhum código, apenas reset
+        return "\033[m"
+    return f"\033[{';'.join(codigos)}m"
+
 pedir_um_nome = lambda : input("Digite um nome: ")
 
 def cadastrar_um_nome():
@@ -36,11 +45,11 @@ def escolher_opocao():
                 return opc
             
             limpar_terminal()
-            print(f"opção inválida: {opc} não está no menu!")
+            print(f"{cor(fundo=41)}opção inválida: {opc} não está no menu!{cor()}")
             opc = input(f"{exibir_menu()}\nTente novamente: ")
         except:
             limpar_terminal()
-            print(f"Você precisa digitar um número! {opc} não é numero!")
+            print(f"{cor(fundo=41)}Você precisa digitar um número! {opc} não é numero!{cor()}")
             opc = input(f"{exibir_menu()}\nTente novamente, faça sua escolha: ")
 
 def pesquisar_nome(num):
@@ -48,22 +57,22 @@ def pesquisar_nome(num):
         num = int(num)
         print("pesquisando...")
         if num not in range(len(nomes)):
-            print(f"{num} não está na lista")
+            print(f"{cor(texto=33)}{num} não está na lista{cor()}")
             return
-        print(f"O numero {num} é o nome {nomes[num]}")
+        print(f"{cor(fundo=41)}O numero {num} é o nome {nomes[num]}{cor()}")
     except:
-        print(f"voce precisa digitar um número!")
+        print(f"{cor(fundo=41)}voce precisa digitar um número!{cor()}")
 
 def lista_todos_os_nomes():
     for idx, nome in enumerate(nomes):
-        print(f"nome {idx} - {nome}") 
+        print(f"{cor(texto=34)}nome {idx} - {nome}{cor()}") 
 
 def decidir_o_que_fazer(opc):
     if opc == 1:
         limpar_terminal()
         print("Você escolheu adicionar um novo nome")
         cadastrar_um_nome()
-        print("cadastrado com sucesso!")
+        print(f"{cor(texto=32)}cadastrado com sucesso!{cor()}")
         press_any_2_continue()
     if opc ==2:
         limpar_terminal()
