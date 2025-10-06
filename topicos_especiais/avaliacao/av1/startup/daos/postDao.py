@@ -22,7 +22,7 @@ class PostDao:
             post.ususario.id
         ]
         with DatabaseConnection() as conn:
-            conn.execute_query("INSERT INTO posts (data_hora, conteudo, midia, usuario_id) VALUES (%s, %s, %s, %s)", params)
+            return conn.execute_query("INSERT INTO posts (data_hora, conteudo, midia, usuario_id) VALUES (%s, %s, %s, %s)", params)
 
     @staticmethod
     def delete_post(post: Post):

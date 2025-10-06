@@ -38,6 +38,7 @@ class DatabaseConnection:
         try:
             self.cursor.execute(query, params or ())
             self.conexao.commit()
+            return self.cursor.lastrowid
         except Error as e:
             self.conexao.rollback()
             print(f"Não foi possivel executar a query:\n {query}:\n {e}")

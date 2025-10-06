@@ -20,7 +20,7 @@ class UsuarioDao:
         email = usuario.email
         params = [nome, email, data_nascimento]
         with DatabaseConnection() as conn:
-            conn.execute_query("INSERT INTO usuarios (nome_completo, email, data_nascimento) VALUES (%s, %s, %s)", params)
+            return conn.execute_query("INSERT INTO usuarios (nome_completo, email, data_nascimento) VALUES (%s, %s, %s)", params)
 
     @staticmethod
     def delete_usuario(usuario: Usuario):
