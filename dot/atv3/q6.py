@@ -12,4 +12,5 @@ def contar_substrings(txt, sub):
 if __name__ == "__main__":
     texto = "cdaaaacdbbbbbbcdcdc"
     sub = "cd"
-    print(contar_substrings(texto, sub))
+    print(texto.count(sub))
+    

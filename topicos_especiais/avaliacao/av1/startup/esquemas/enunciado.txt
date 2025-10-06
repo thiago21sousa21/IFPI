@@ -1,0 +1,11 @@
+2) Uma startup de tecnologia está desenvolvendo uma rede social acadêmica para conectar
+estudantes, professores e pesquisadores. O sistema precisa armazenar diversas informações
+para possibilitar interações entre os usuários.
+● Cada usuário possui um identificador único, nome completo, e-mail, data de nascimento e
+pode ter múltiplos números de telefone e idade.
+● Um usuário pode criar vários posts, cada um com data/hora de publicação, conteúdo
+textual e opcionalmente uma mídia (imagem ou vídeo).
+● Usuários podem curtir e comentar posts de outros usuários. Cada comentário possui
+data/hora e texto.
+● Os usuários podem se conectar entre si através de relações de amizade. Essa relação
+deve registrar a data em que a amizade foi estabelecida.
