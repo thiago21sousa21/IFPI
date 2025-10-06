@@ -1,5 +1,5 @@
 from database.connection import DatabaseConnection
-from models.usuario import Usuario
+from models import Usuario
 
 class UsuarioDao:
 
