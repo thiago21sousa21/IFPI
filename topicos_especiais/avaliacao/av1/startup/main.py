@@ -1,6 +1,7 @@
-from daos import UsuarioDao, TelefoneDao
+from daos import UsuarioDao, TelefoneDao, PostDao
 import os
-from models import Usuario, Telefone
+from models import Usuario, Telefone, Post
+from datetime import datetime
 
 (lambda: os.system("clear"))()
 
@@ -38,6 +39,27 @@ u1: Usuario = Usuario("thiago", "@mail", "2022-01-01")
 # t1.numero = "3333333333"
 # TelefoneDao.atualizar_telefone(t1)
 # print(TelefoneDao.listar_todos_telefones())
+
+
+###################
+### TESTE POSTS ###
+###################
+
+# post1:Post = Post(datetime.now(), "Bom dia!", u1, midia="meu link 1")
+# print(PostDao.listar_todos_posts())
+# u1.id = 2
+# post1.id = 2
+# PostDao.inserir_post(post1)
+
+#print(PostDao.buscar_post(post1))
+#PostDao.delete_post(post1)
+
+#ATUALIZAR  POST
+# post1.conteudo = "Boa tarde"
+# post1.midia = "Meu link 2"
+# PostDao.atualizar_post(post1)
+# print(PostDao.listar_todos_posts())
+#PostDao.atualizar_post()
 
 print()
 
