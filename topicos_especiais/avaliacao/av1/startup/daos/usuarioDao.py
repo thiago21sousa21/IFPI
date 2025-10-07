@@ -11,14 +11,14 @@ class UsuarioDao:
     @staticmethod
     def buscar_usuario(usuario: Usuario):
         with DatabaseConnection() as conn:
-            return conn.fetch_one("SELECT * FROM usuarios WHERE id = %s", [usuario.id])
+            resultado = conn.fetch_one("SELECT * FROM usuarios WHERE id = %s", [usuario.id])
+            if resultado:
+                return Usuario(**usuario)
+            return None
         
     @staticmethod
     def inserir_usuario(usuario: Usuario):
-        nome = usuario.nome_completo
-        data_nascimento = usuario.data_nascimento
-        email = usuario.email
-        params = [nome, email, data_nascimento]
+        params = [usuario.nome_completo, usuario.email, usuario.data_nascimento]
         with DatabaseConnection() as conn:
             return conn.execute_query("INSERT INTO usuarios (nome_completo, email, data_nascimento) VALUES (%s, %s, %s)", params)
 
