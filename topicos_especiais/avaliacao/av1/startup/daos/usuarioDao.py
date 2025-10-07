@@ -6,7 +6,8 @@ class UsuarioDao:
     @staticmethod
     def listar_todos_os_usuarios():
         with DatabaseConnection() as conn:
-            return conn.fetch_all("SELECT * FROM usuarios")
+            results = conn.fetch_all("SELECT * FROM usuarios")
+            return [ Usuario(**result) for result in results]
 
     @staticmethod
     def buscar_usuario(usuario: Usuario):

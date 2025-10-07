@@ -69,10 +69,7 @@ u1: Usuario = Usuario("thiago", "@mail", "2022-01-01")
 # CRIAR UM LIKE
 
 #primeiro deletar todos os usuarios
-with DatabaseConnection() as cnn:
-    cnn.execute_query("DELETE FROM likes")
-    cnn.execute_query("DELETE FROM posts")
-    cnn.execute_query("DELETE FROM usuarios")
+
 
 #precisa existir um usuario pra criar um post
 print("criando primeiro um usuario")

@@ -6,12 +6,15 @@ class TelefoneDao:
     @staticmethod
     def listar_todos_telefones():
         with DatabaseConnection() as conn:
-            return conn.fetch_all("SELECT * FROM telefones")
+            return [Telefone(**result) for result in conn.fetch_all("SELECT * FROM telefones")]
 
     @staticmethod
     def buscar_telefone(telefone: Telefone):
         with DatabaseConnection() as conn:
-            return conn.fetch_one("SELECT * FROM telefones WHERE id = %s", [telefone.id])
+            result = conn.fetch_one("SELECT * FROM telefones WHERE id = %s", [telefone.id])
+            if result:
+                return Telefone(**result)
+            return None
         
     @staticmethod
     def inserir_telefone(telefone: Telefone):

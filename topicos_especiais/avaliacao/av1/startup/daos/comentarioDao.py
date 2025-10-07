@@ -6,12 +6,16 @@ class ComentarioDao:
     @staticmethod
     def listar_todos_os_comentarios():
         with DatabaseConnection() as conn:
-            return conn.fetch_all("SELECT * FROM comentarios")
+            results = conn.fetch_all("SELECT * FROM comentarios")
+            return [ Comentario(**result) for result in results]
 
     @staticmethod
     def buscar_comentario(comentario: Comentario):
         with DatabaseConnection() as conn:
-            return conn.fetch_one("SELECT * FROM comentarios WHERE id = %s", [comentario.id])
+            result = conn.fetch_one("SELECT * FROM comentarios WHERE id = %s", [comentario.id])
+            if result:
+                return Comentario(**result)
+            return None
         
     @staticmethod
     def inserir_comentario(comentario: Comentario):

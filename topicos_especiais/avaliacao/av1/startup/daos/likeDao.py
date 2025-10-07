@@ -7,12 +7,16 @@ class LikeDao:
     @staticmethod
     def listar_todos_os_likes():
         with DatabaseConnection() as conn:
-            return conn.fetch_all("SELECT * FROM likes")
+            results = conn.fetch_all("SELECT * FROM likes")
+            return [Like(**result) for result in results]
 
     @staticmethod
     def buscar_like(like: Like):
         with DatabaseConnection() as conn:
-            return conn.fetch_one("SELECT * FROM likes WHERE id = %s", [like.id])
+            result = conn.fetch_one("SELECT * FROM likes WHERE id = %s", [like.id])
+            if result:
+                return Like(**result)
+            return None
         
     @staticmethod
     def inserir_like(like: Like):

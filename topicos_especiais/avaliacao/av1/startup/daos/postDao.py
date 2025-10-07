@@ -6,12 +6,16 @@ class PostDao:
     @staticmethod
     def listar_todos_posts():
         with DatabaseConnection() as conn:
-            return conn.fetch_all("SELECT * FROM posts")
+            results = conn.fetch_all("SELECT * FROM posts")
+            return [Post(**result) for result in results]
 
     @staticmethod
     def buscar_post(post: Post):
         with DatabaseConnection() as conn:
-            return conn.fetch_one("SELECT * FROM posts WHERE id = %s", [post.id])
+            result = conn.fetch_one("SELECT * FROM posts WHERE id = %s", [post.id])
+            if result:
+                return Post(**result)
+            return None
         
     @staticmethod
     def inserir_post(post: Post):

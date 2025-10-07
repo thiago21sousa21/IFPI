@@ -1,5 +1,5 @@
 from database.connection import DatabaseConnection
-from models import Amizade, Usuario
+from models import Amizade
 
 
 class AmizadeDao:
@@ -7,7 +7,8 @@ class AmizadeDao:
     @staticmethod
     def listar_todos_os_amizades():
         with DatabaseConnection() as conn:
-            return conn.fetch_all("SELECT * FROM amizades")
+            results = conn.fetch_all("SELECT * FROM amizades")
+            return [Amizade(**result) for result in results]
 
     @staticmethod
     def buscar_amizade(amizade: Amizade):
@@ -16,8 +17,8 @@ class AmizadeDao:
             amizade.usuario2.id
         ]
         with DatabaseConnection() as conn:
-            return (conn.fetch_one("SELECT * FROM amizades WHERE usuario_id_1 = %s AND usuario_id_2=%s", params)
-                    and conn.fetch_one("SELECT * FROM amizades WHERE usuario_id_2 = %s AND usuario_id_1=%s", params))
+            return (True if (conn.fetch_one("SELECT * FROM amizades WHERE usuario_id_1 = %s AND usuario_id_2=%s", params)
+                    and conn.fetch_one("SELECT * FROM amizades WHERE usuario_id_2 = %s AND usuario_id_1=%s", params)) else False)
         
     @staticmethod
     def inserir_amizade(amizade: Amizade):
