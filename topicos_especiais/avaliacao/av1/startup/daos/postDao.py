@@ -1,5 +1,5 @@
 from database.connection import DatabaseConnection
-from models import Post
+from models.post import Post
 
 class PostDao:
 
@@ -10,9 +10,9 @@ class PostDao:
             return [Post(**result) for result in results]
 
     @staticmethod
-    def buscar_post(post: Post):
+    def buscar_post(id: int):
         with DatabaseConnection() as conn:
-            result = conn.fetch_one("SELECT * FROM posts WHERE id = %s", [post.id])
+            result = conn.fetch_one("SELECT * FROM posts WHERE id = %s", [id])
             if result:
                 return Post(**result)
             return None
@@ -29,9 +29,9 @@ class PostDao:
             return conn.execute_query("INSERT INTO posts (data_hora, conteudo, midia, usuario_id) VALUES (%s, %s, %s, %s)", params)
 
     @staticmethod
-    def delete_post(post: Post):
+    def delete_post(id:int):
         with DatabaseConnection() as conn:
-            conn.execute_query("DELETE FROM posts WHERE id= %s", [post.id])
+            conn.execute_query("DELETE FROM posts WHERE id= %s", [id])
 
     @staticmethod
     def atualizar_post(post: Post):

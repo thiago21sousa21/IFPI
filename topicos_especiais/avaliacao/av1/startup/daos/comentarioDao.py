@@ -10,9 +10,9 @@ class ComentarioDao:
             return [ Comentario(**result) for result in results]
 
     @staticmethod
-    def buscar_comentario(comentario: Comentario):
+    def buscar_comentario(id: int):
         with DatabaseConnection() as conn:
-            result = conn.fetch_one("SELECT * FROM comentarios WHERE id = %s", [comentario.id])
+            result = conn.fetch_one("SELECT * FROM comentarios WHERE id = %s", [id])
             if result:
                 return Comentario(**result)
             return None
@@ -28,9 +28,9 @@ class ComentarioDao:
             return conn.execute_query("INSERT INTO comentarios (post_id, usuario_id, conteudo) VALUES (%s, %s, %s)", params)
 
     @staticmethod
-    def delete_comentario(comentario: Comentario):
+    def delete_comentario(id: int ):
         with DatabaseConnection() as conn:
-            conn.execute_query("DELETE FROM comentarios WHERE id= %s", [comentario.id])
+            conn.execute_query("DELETE FROM comentarios WHERE id= %s", [id])
 
     @staticmethod
     def atualizar_comentario(comentario: Comentario):

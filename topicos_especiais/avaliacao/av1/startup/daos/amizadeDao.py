@@ -11,11 +11,8 @@ class AmizadeDao:
             return [Amizade(**result) for result in results]
 
     @staticmethod
-    def buscar_amizade(amizade: Amizade):
-        params = [
-            amizade.usuario1.id,
-            amizade.usuario2.id
-        ]
+    def buscar_amizade(id1: int, id2: int):
+        params = [id1,id2]
         with DatabaseConnection() as conn:
             return (True if (conn.fetch_one("SELECT * FROM amizades WHERE usuario_id_1 = %s AND usuario_id_2=%s", params)
                     and conn.fetch_one("SELECT * FROM amizades WHERE usuario_id_2 = %s AND usuario_id_1=%s", params)) else False)
@@ -30,11 +27,8 @@ class AmizadeDao:
             return conn.execute_query("INSERT INTO amizades (usuario_id_1, usuario_id_2) VALUES (%s, %s)", params)
 
     @staticmethod
-    def delete_amizade(amizade: Amizade):
-        params = [
-            amizade.usuario1.id,
-            amizade.usuario2.id
-        ]
+    def delete_amizade(id1:int, id2:int):
+        params = [id1,id2]
         with DatabaseConnection() as conn:
             conn.execute_query("DELETE FROM amizades WHERE usuario_id_1 = %s AND usuario_id_2=%s", params)
    

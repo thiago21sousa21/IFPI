@@ -1,5 +1,5 @@
 from datetime import datetime
-from models import Usuario
+from models.usuario import Usuario
 
 class Post:
     def __init__(self, data_hora:datetime , conteudo:str, usuario: Usuario, id:int= None, midia:str=None):

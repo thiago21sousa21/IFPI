@@ -1,5 +1,5 @@
 from database.connection import DatabaseConnection
-from models import Usuario
+from models.usuario import Usuario
 
 class UsuarioDao:
 
@@ -10,11 +10,11 @@ class UsuarioDao:
             return [ Usuario(**result) for result in results]
 
     @staticmethod
-    def buscar_usuario(usuario: Usuario):
+    def buscar_usuario(id: int):
         with DatabaseConnection() as conn:
-            resultado = conn.fetch_one("SELECT * FROM usuarios WHERE id = %s", [usuario.id])
+            resultado = conn.fetch_one("SELECT * FROM usuarios WHERE id = %s", [id])
             if resultado:
-                return Usuario(**usuario)
+                return Usuario(**resultado)
             return None
         
     @staticmethod
@@ -24,9 +24,9 @@ class UsuarioDao:
             return conn.execute_query("INSERT INTO usuarios (nome_completo, email, data_nascimento) VALUES (%s, %s, %s)", params)
 
     @staticmethod
-    def delete_usuario(usuario: Usuario):
+    def delete_usuario(id: int):
         with DatabaseConnection() as conn:
-            conn.execute_query("DELETE FROM usuarios WHERE id= %s", [usuario.id])
+            conn.execute_query("DELETE FROM usuarios WHERE id= %s", [id])
 
     @staticmethod
     def atualizar_usuario(usuario: Usuario):
