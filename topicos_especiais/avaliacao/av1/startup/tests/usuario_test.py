@@ -11,7 +11,6 @@ class Testar_usuario:
 
     def testar_tudo(self):
         idUsuariCriado = next(self.criar_usuario(10))
-        print(next(idUsuariCriado))
         usuario_buscado = self.busca_um_usuario(idUsuariCriado)
         print(vars(usuario_buscado))
         print("Vou usar o buscar tudo... ")

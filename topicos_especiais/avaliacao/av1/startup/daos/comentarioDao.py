@@ -1,5 +1,5 @@
 from database.connection import DatabaseConnection
-from models import Comentario
+from models.comentario import Comentario
 
 class ComentarioDao:
 

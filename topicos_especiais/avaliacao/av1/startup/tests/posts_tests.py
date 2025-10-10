@@ -12,25 +12,32 @@ class Testar_posts:
         pass
 
     def testar_tudo(self):
-        idUsuariCriado = next(self.criar_usuario(10))
-        print(next(idUsuariCriado))
-        usuario_buscado = self.busca_um_usuario(idUsuariCriado)
-        print(vars(usuario_buscado))
-        print("Vou usar o buscar tudo... ")
-        print(self.buscar_usuarios())
-        print("Vou deletar o usuario agora...")
-        print(self.deletar_usuario(idUsuariCriado))
+        #primeiro vou criar um usuario pra poder criar o post do usuario
+        teste = Testar_usuario()
+        usuarioId = next(teste.criar_usuario())
+        usuario = teste.busca_um_usuario(usuarioId)
+
+        #agora podemos criar o post
+        postId = next(self.criar_post(10))
+        post = self.busca_um_post(postId)
+        print(vars(post))
+        print("Vou usar o buscar  o post... ")
+        print(self.busca_um_post(postId))
+        print("Vou deletar o post agora...")
+        print(self.deletar_post(postId))
         print("Vou conferir se deletou...")
-        print(self.buscar_usuarios())
+        print(self.buscar_todos_os_posts())
 
 
     def criar_post(self, qnt:int = 1, usuario: Usuario = None):
         if not usuario:
-            usuario = next(Testar_usuario.criar_usuario(1))
+            teste_usuario = Testar_usuario()
+            usuarioId = next(teste_usuario.criar_usuario())
+        usuario = teste_usuario.busca_um_usuario(usuarioId)
 
         for _ in range(qnt):
             post = Post(fake.date_time(), fake.text(100), usuario)
-            yield PostDao.inserir_post()
+            yield PostDao.inserir_post(post)
 
     def busca_um_post(self, id: int):
         return PostDao.buscar_post(id)
@@ -38,7 +45,7 @@ class Testar_posts:
     def buscar_todos_os_posts(self):
         return PostDao.listar_todos_posts()
     
-    def deletar_usuario(self, id:int):
+    def deletar_post(self, id:int):
         return PostDao.delete_post(id)
 
 

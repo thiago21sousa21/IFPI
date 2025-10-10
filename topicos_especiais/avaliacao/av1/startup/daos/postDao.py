@@ -1,5 +1,7 @@
 from database.connection import DatabaseConnection
 from models.post import Post
+from daos.usuarioDao import UsuarioDao
+from models.usuario import Usuario
 
 class PostDao:
 
@@ -13,8 +15,16 @@ class PostDao:
     def buscar_post(id: int):
         with DatabaseConnection() as conn:
             result = conn.fetch_one("SELECT * FROM posts WHERE id = %s", [id])
+            print(result)
             if result:
-                return Post(**result)
+                usuario:Usuario = UsuarioDao.buscar_usuario(result["usuario_id"]) 
+                return Post(
+                    data_hora=result["data_hora"],
+                    conteudo= result["conteudo"],
+                    id= result["id"],
+                    midia= result["midia"],
+                    usuario= usuario
+                )
             return None
         
     @staticmethod
