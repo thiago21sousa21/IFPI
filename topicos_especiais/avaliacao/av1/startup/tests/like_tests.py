@@ -1,45 +1,58 @@
-###################
-### TESTE LIKES ###
-###################
 
-# CRIAR UM LIKE
+from models.like import Like
+from models.usuario import Usuario
+from daos.likeDao import LikeDao
+from faker import Faker
+from tests.usuario_test import Testar_usuario
+from tests.posts_tests import Testar_posts
+from models.post import Post
 
-#primeiro deletar todos os usuarios
+
+fake = Faker()
+
+class Testar_likes:
+    def __init__(self):
+        pass
+
+    def testar_tudo(self):
+
+        print("Vou criar um like")
+        like_id = next(self.criar_like())
+        print(f"id do like: {like_id}")
+        print("Agora vou buscar o like")
+        like = self.busca_um_like(like_id)
+        print(like)
+        print("Agora vou deletar")
+        self.deletar_likes(like_id)
+        print("Agora vou buscar todos pra conferir se deletou")
+        self.buscar_todos_os_likes()
 
 
-#precisa existir um usuario pra criar um post
-# print("criando primeiro um usuario")
-# usuario_exempo: Usuario = Usuario("thiago", "@mail", "2021-01-01")
-# print("Inserindo no banco")
-# usuario_exempo.id = UsuarioDao.inserir_usuario(usuario_exempo)
-# print(vars(usuario_exempo))
+    def criar_like(self, post:Post = None, usuario:Usuario = None):
+        if not usuario:
+            teste_usuario = Testar_usuario()
+            usuarioId = next(teste_usuario.criar_usuario())
+            usuario = teste_usuario.busca_um_usuario(usuarioId)
+            print(usuario)
 
-# # precisa existir um post os likes do post
-# print("Criando o post exemplo ...")
-# post_exemplo:Post = Post(datetime.now(), "Bom dia!", usuario_exempo, midia="meu link 0")
-# print(vars(post_exemplo))
-# print("Inserindo no banco...")
-# post_exemplo.id = PostDao.inserir_post(post_exemplo)
-# print(vars(post_exemplo))
+        if not post:
+            print("Agora vou criar um post")
+            teste_post = Testar_posts()
+            postId = next(teste_post.criar_post())
+            post = teste_post.busca_um_post(postId)
+            print(post)
 
-# #agora se pode criar o like
-# print("Criando like...")
-# like_exemplo:Like = Like(post_exemplo, usuario_exempo)
-# print(vars(like_exemplo))
-# print("Inserindo o like exemplo no banco")
-# like_exemplo.id = LikeDao.inserir_like(like_exemplo)
-# print(vars(like_exemplo))
+        like = Like(post, usuario)
+        yield LikeDao.inserir_like(like)
 
-# #agora listar todos os likes
-# print("Listando todos os likes")
-# print(LikeDao.listar_todos_os_likes())
-# print(f"Agora buscando like especifico, like com id: {like_exemplo.id}")
-# like_buscado:Like = LikeDao.buscar_like(like_exemplo)
-# print(like_buscado)
+    def busca_um_like(self, id: int):
+        return LikeDao.buscar_like(id)
 
-# #Atualizar like
-# like_exemplo.data_hora = None
-# print(vars(like_exemplo))
-# print(f"atualizando o like exemplo que tinha data inserida por default para none")
-# LikeDao.atualizar_like(like_exemplo)
-# print(LikeDao.buscar_like(like_exemplo))
+    def buscar_todos_os_likes(self):
+        return LikeDao.listar_todos_os_likes()
+    
+    def deletar_likes(self, id:int):
+        return LikeDao.delete_like(id)
+
+
+

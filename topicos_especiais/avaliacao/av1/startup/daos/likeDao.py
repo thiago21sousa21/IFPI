@@ -1,5 +1,8 @@
 from database.connection import DatabaseConnection
-from models import Like, Post
+from models.like import Like
+from models.post import Post
+from daos.usuarioDao import UsuarioDao
+from daos.postDao import PostDao
 
 
 class LikeDao:
@@ -8,14 +11,29 @@ class LikeDao:
     def listar_todos_os_likes():
         with DatabaseConnection() as conn:
             results = conn.fetch_all("SELECT * FROM likes")
-            return [Like(**result) for result in results]
+            for result in results:
+                post = PostDao.buscar_post(result["post_id"])
+                usuario = UsuarioDao.buscar_usuario(result["usuario_id"])
+                yield Like(
+                    id=result["id"],
+                    data_hora=result["data_hora"],
+                    post=post,
+                    usuario=usuario
+                )
 
     @staticmethod
     def buscar_like(id:int):
         with DatabaseConnection() as conn:
             result = conn.fetch_one("SELECT * FROM likes WHERE id = %s", [id])
             if result:
-                return Like(**result)
+                post = PostDao.buscar_post(result["post_id"])
+                usuario = UsuarioDao.buscar_usuario(result["usuario_id"])
+                return Like(
+                    id=result["id"],
+                    data_hora=result["data_hora"],
+                    post=post,
+                    usuario=usuario
+                )
             return None
         
     @staticmethod

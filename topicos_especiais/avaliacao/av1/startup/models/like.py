@@ -1,5 +1,6 @@
 from datetime import datetime
-from models import Post, Usuario
+from models.post import Post
+from models.usuario import Usuario
 
 class Like:
     def __init__(self, post:Post, usuario:Usuario, id:int = None, data_hora:datetime = None):
