@@ -1,4 +1,4 @@
-from models import Usuario
+from models.usuario import Usuario
 from datetime import datetime
 
 class Amizade:

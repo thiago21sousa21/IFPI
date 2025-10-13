@@ -1,5 +1,5 @@
 from database.connection import DatabaseConnection
-from models import Amizade
+from models.amizade import Amizade
 
 
 class AmizadeDao:
@@ -14,8 +14,13 @@ class AmizadeDao:
     def buscar_amizade(id1: int, id2: int):
         params = [id1,id2]
         with DatabaseConnection() as conn:
-            return (True if (conn.fetch_one("SELECT * FROM amizades WHERE usuario_id_1 = %s AND usuario_id_2=%s", params)
-                    and conn.fetch_one("SELECT * FROM amizades WHERE usuario_id_2 = %s AND usuario_id_1=%s", params)) else False)
+            amizade12 = conn.fetch_one("SELECT * FROM amizades WHERE usuario_id_1 = %s AND usuario_id_2=%s", params)
+            amizade21 = conn.fetch_one("SELECT * FROM amizades WHERE usuario_id_2 = %s AND usuario_id_1=%s", params)
+            
+            if amizade12 and amizade21:
+                return ( amizade12, amizade21)
+            
+            return None
         
     @staticmethod
     def inserir_amizade(amizade: Amizade):
