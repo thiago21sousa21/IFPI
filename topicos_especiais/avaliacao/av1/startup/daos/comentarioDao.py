@@ -1,5 +1,7 @@
 from database.connection import DatabaseConnection
 from models.comentario import Comentario
+from daos.postDao import PostDao
+from daos.usuarioDao import UsuarioDao
 
 class ComentarioDao:
 
@@ -7,14 +9,31 @@ class ComentarioDao:
     def listar_todos_os_comentarios():
         with DatabaseConnection() as conn:
             results = conn.fetch_all("SELECT * FROM comentarios")
-            return [ Comentario(**result) for result in results]
+            for result in results:
+                post = PostDao.buscar_post(result["post_id"])
+                usuario = UsuarioDao.buscar_usuario(result["usuario_id"])
+                yield Comentario(
+                    id=result["id"],
+                    conteudo=result["conteudo"],
+                    data_hora=result["data_hora"],
+                    post=post,
+                    usuario=usuario
+                )
 
     @staticmethod
     def buscar_comentario(id: int):
         with DatabaseConnection() as conn:
             result = conn.fetch_one("SELECT * FROM comentarios WHERE id = %s", [id])
             if result:
-                return Comentario(**result)
+                post = PostDao.buscar_post(result["post_id"])
+                usuario = UsuarioDao.buscar_usuario(result["usuario_id"])
+                return Comentario(
+                    id=result["id"],
+                    conteudo=result["conteudo"],
+                    data_hora=result["data_hora"],
+                    post=post,
+                    usuario=usuario
+                )
             return None
         
     @staticmethod

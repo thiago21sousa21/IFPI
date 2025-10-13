@@ -1,21 +1,34 @@
 from database.connection import DatabaseConnection
-from models import Telefone
-from daos import UsuarioDao
+from models.telefone import Telefone
+from daos.usuarioDao import UsuarioDao
 
 class TelefoneDao:
 
     @staticmethod
     def listar_todos_telefones():
         with DatabaseConnection() as conn:
-            return [Telefone(**result) for result in conn.fetch_all("SELECT * FROM telefones")]
+            results = conn.fetch_all("SELECT * FROM telefones")
+            for result in results:
+                usuario = UsuarioDao.buscar_usuario(result["usuario_id"])
+                yield Telefone(
+                    numero= result["numero"],
+                    usuario= usuario,
+                    id=result["id"]
+                )
 
     @staticmethod
     def buscar_telefone(id: int):
         with DatabaseConnection() as conn:
             result = conn.fetch_one("SELECT * FROM telefones WHERE id = %s", [id])
             if result:
-                return Telefone(**result)
+                usuario = UsuarioDao.buscar_usuario(result["usuario_id"])
+                return Telefone(
+                    numero= result["numero"],
+                    usuario= usuario,
+                    id=result["id"]
+                )
             return None
+
         
     @staticmethod
     def inserir_telefone(telefone: Telefone):

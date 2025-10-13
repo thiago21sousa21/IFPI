@@ -9,13 +9,20 @@ class PostDao:
     def listar_todos_posts():
         with DatabaseConnection() as conn:
             results = conn.fetch_all("SELECT * FROM posts")
-            return [Post(**result) for result in results]
+            for result in results:
+                usuario:Usuario = UsuarioDao.buscar_usuario(result["usuario_id"])
+                yield Post(
+                    data_hora=result["data_hora"],
+                    conteudo= result["conteudo"],
+                    id= result["id"],
+                    midia= result["midia"],
+                    usuario= usuario
+                )
 
     @staticmethod
     def buscar_post(id: int):
         with DatabaseConnection() as conn:
             result = conn.fetch_one("SELECT * FROM posts WHERE id = %s", [id])
-            print(result)
             if result:
                 usuario:Usuario = UsuarioDao.buscar_usuario(result["usuario_id"]) 
                 return Post(

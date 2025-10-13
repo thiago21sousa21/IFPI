@@ -1,4 +1,5 @@
-from models import Post, Usuario
+from models.post import Post
+from models.usuario import Usuario
 from datetime import datetime
 
 class Comentario:

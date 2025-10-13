@@ -1,37 +1,52 @@
-from models import Usuario, Telefone
-from daos import UsuarioDao, TelefoneDao
+
+from models.telefone import Telefone
+from daos.telefoneDao import TelefoneDao
+from faker import Faker
+from tests.usuario_test import Testar_usuario
+from models.usuario import Usuario
+
+fake = Faker()
+
+class Testar_telefones:
+    def __init__(self):
+        pass
+
+    def testar_tudo(self):
+        #primeiro vou criar um usuario pra poder criar o post do usuario
+        teste = Testar_usuario()
+        usuarioId = next(teste.criar_usuario())
+        usuario = teste.busca_um_usuario(usuarioId)
+
+        print("Vou criar um telefone")
+        telefoneId = next(self.criar_telefone(10,usuario))
+        print(f"id do ultimo telefone: {telefoneId}")
+        print(f"Vou buscar  o telefone de id: {telefoneId}")
+        telefone = self.busca_um_telefone(telefoneId)
+        print(telefone)
+        print("Vou deletar o telefone agora...")
+        print(self.deletar_telefone(telefoneId))
+        print("Vou conferir se deletou...")
+        print(self.buscar_todos_os_telefones())
 
 
-# from tests.telefone_teste import testar_telefone
+    def criar_telefone(self, qnt:int = 1, usuario: Usuario = None):
+        if not usuario:
+            teste_usuario = Testar_usuario()
+            usuarioId = next(teste_usuario.criar_usuario())
+            usuario = teste_usuario.busca_um_usuario(usuarioId)
 
-# testar_telefone()
+        for _ in range(qnt):
+            telefone = Telefone(fake.phone_number(), usuario)
+            yield TelefoneDao.inserir_telefone(telefone)
 
-# print(vars(busca_um_usuario()))
-# print(buscar_usuarios())
+    def busca_um_telefone(self, id: int):
+        return TelefoneDao.buscar_telefone(id)
 
-######################
-### TESTE TELEFONE ###
-######################
-
-
-
-def testar_telefone():
-
-    u1 = Usuario("Thiago", "Thiago@Mail", "2000-01-01")
-    u1.id = UsuarioDao.inserir_usuario(u1)
+    def buscar_todos_os_telefones(self):
+        return TelefoneDao.listar_todos_telefones()
     
-    t1: Telefone = Telefone("4567", u1)
-    t1.id = 1
+    def deletar_telefone(self, id:int):
+        return TelefoneDao.delete_telefone(id)
 
-    print(TelefoneDao.listar_todos_telefones())
-    print(TelefoneDao.inserir_telefone(t1))
-    print(TelefoneDao.listar_todos_telefones())
-    print('####')
-    print(TelefoneDao.buscar_telefone(t1))
-    TelefoneDao.delete_telefone(t1)
-    print(TelefoneDao.listar_todos_telefones())
-    t1.id = 2
-    t1.numero = "3333333333"
-    TelefoneDao.atualizar_telefone(t1)
-    print(TelefoneDao.listar_todos_telefones())
+
 
