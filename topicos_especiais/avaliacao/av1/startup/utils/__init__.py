@@ -1,0 +1,2 @@
+from utils.limpar_banco import limpar_banco
+from utils.limpar_terminal import limpar_terminal
