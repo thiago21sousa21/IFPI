@@ -2,6 +2,7 @@ from typing import List, Optional
 from mysql.connector import Error
 from models.cliente import Cliente
 from conexao import Conexao
+from utils.lista_classes import retornar_lista_instancias
 
 
 class ClienteDAO:
@@ -79,19 +80,7 @@ class ClienteDAO:
             resultados = cursor.fetchall()
             cursor.close()
             
-            clientes = []
-            for resultado in resultados:
-                cliente = Cliente(
-                    id_cliente=resultado['id_cliente'],
-                    nome=resultado['nome'],
-                    email=resultado['email'],
-                    telefone=resultado['telefone'],
-                    created_at=resultado['created_at'],
-                    updated_at=resultado['updated_at']
-                )
-                clientes.append(cliente)
-            
-            return clientes
+            return retornar_lista_instancias(Cliente, resultados)
             
         except Error as e:
             print(f"Erro ao buscar clientes: {e}")

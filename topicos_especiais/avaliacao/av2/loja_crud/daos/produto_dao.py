@@ -4,6 +4,7 @@ from decimal import Decimal
 from mysql.connector import Error
 from models.produto import Produto
 from conexao import Conexao
+from utils.lista_classes import retornar_lista_instancias
 
 
 class ProdutoDAO:
@@ -76,20 +77,7 @@ class ProdutoDAO:
             
             resultados = cursor.fetchall()
             cursor.close()
-            
-            produtos = []
-            for resultado in resultados:
-                produto = Produto(
-                    id_produto=resultado['id_produto'],
-                    nome=resultado['nome'],
-                    preco=Decimal(str(resultado['preco'])),
-                    estoque=resultado['estoque'],
-                    created_at=resultado['created_at'],
-                    updated_at=resultado['updated_at']
-                )
-                produtos.append(produto)
-            
-            return produtos
+            return retornar_lista_instancias(Produto, resultados)
             
         except Error as e:
             print(f"Erro ao buscar produtos: {e}")
@@ -161,19 +149,7 @@ class ProdutoDAO:
             resultados = cursor.fetchall()
             cursor.close()
             
-            produtos = []
-            for resultado in resultados:
-                produto = Produto(
-                    id_produto=resultado['id_produto'],
-                    nome=resultado['nome'],
-                    preco=Decimal(str(resultado['preco'])),
-                    estoque=resultado['estoque'],
-                    created_at=resultado['created_at'],
-                    updated_at=resultado['updated_at']
-                )
-                produtos.append(produto)
-            
-            return produtos
+            return retornar_lista_instancias(resultados)
             
         except Error as e:
             print(f"Erro ao buscar produtos por preço: {e}")

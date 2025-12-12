@@ -7,6 +7,8 @@ from datetime import date
 from mysql.connector import Error
 from models.pedido import Pedido
 from conexao import Conexao
+from utils.lista_classes import retornar_lista_instancias
+
 
 
 class PedidoDAO:
@@ -78,19 +80,7 @@ class PedidoDAO:
             resultados = cursor.fetchall()
             cursor.close()
             
-            pedidos = []
-            for resultado in resultados:
-                pedido = Pedido(
-                    id_pedido=resultado['id_pedido'],
-                    id_cliente=resultado['id_cliente'],
-                    data_pedido=resultado['data_pedido'],
-                    total=Decimal(str(resultado['total'])),
-                    created_at=resultado['created_at'],
-                    updated_at=resultado['updated_at']
-                )
-                pedidos.append(pedido)
-            
-            return pedidos
+            return retornar_lista_instancias(resultados)
             
         except Error as e:
             print(f"Erro ao buscar pedidos: {e}")
@@ -162,19 +152,7 @@ class PedidoDAO:
             resultados = cursor.fetchall()
             cursor.close()
             
-            pedidos = []
-            for resultado in resultados:
-                pedido = Pedido(
-                    id_pedido=resultado['id_pedido'],
-                    id_cliente=resultado['id_cliente'],
-                    data_pedido=resultado['data_pedido'],
-                    total=Decimal(str(resultado['total'])),
-                    created_at=resultado['created_at'],
-                    updated_at=resultado['updated_at']
-                )
-                pedidos.append(pedido)
-            
-            return pedidos
+            return retornar_lista_instancias(resultados)
             
         except Error as e:
             print(f"Erro ao buscar pedidos por cliente: {e}")
