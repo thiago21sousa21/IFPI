@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_final/cadastro_contato_screen.dart';
+import 'package:projeto_final/cadastro_usuario_screen.dart';
+import 'package:projeto_final/controller/usuario_helper.dart';
 import 'package:projeto_final/home_screen.dart';
+import 'package:projeto_final/model/usuario.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,14 +15,16 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _senhaController = TextEditingController();
+  final UsuarioHelper _helper = UsuarioHelper();
 
   // Função fictícia para simular a autenticação
-  void _fazerLogin() {
+  void _fazerLogin() async{
     String email = _emailController.text;
     String senha = _senhaController.text;
 
-    // Lógica simples de validação (a validação real do projeto final virá depois)
-    if (email == "teste@ifpi.edu.br" && senha == "123") {
+    Usuario? usuario = await _helper.autenticar(email, senha);
+
+    if (usuario != null) {
       // Login bem-sucedido: Navegar para a tela de entrada (Home)
      Navigator.pushReplacement(
       context, 
@@ -33,6 +39,54 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> _iniciarRecuperacaoSenha(BuildContext context) async {
+    TextEditingController emailRecController = TextEditingController();
+    TextEditingController perguntaRecController = TextEditingController();
+
+    await showDialog(
+      context: context, 
+      builder: (context) => AlertDialog(
+        title: const Text("Recuperação de Senha"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(controller:  emailRecController, decoration: const InputDecoration( labelText: "Email Cadastrado")),
+            TextField(controller: perguntaRecController, decoration: const InputDecoration(labelText: "Resposta Secreta"),)
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancelar ")),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              Usuario? usuario = await _helper.buscarPorEmailPergunta(
+                emailRecController.text, 
+                perguntaRecController.text
+              );
+
+              if (usuario !=null){
+                Navigator.pushReplacement(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context) => CadastroUsuarioScreen(
+                      modo: ModoAutenticacao.redefinir,
+                      usuarioParaEdicao: usuario
+                    )
+                  )
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Email ou resposta secreta incorretos.")),
+                );
+              }
+            }, 
+            child: const Text("Verificar")
+          )
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,11 +96,8 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 50),
-            
-            // 1. Logo do IFPI (Imagem) [cite: 105]
-            // Nota: Você precisará adicionar o logo do IFPI (e a referência no pubspec.yaml) para que funcione.
-            // Para o nosso projeto, vamos usar um placeholder de texto por enquanto.
-            // Image.asset('caminho/para/logo_ifpi.png', height: 100),
+           
+            Image.asset('assets/logo_ifpi.png', height: 100),
             Container(
               height: 100,
               alignment: Alignment.center,
@@ -59,10 +110,9 @@ class _LoginScreenState extends State<LoginScreen> {
             
             SizedBox(height: 80),
 
-            // 2. Campo de Email [cite: 106]
             TextField(
               controller: _emailController,
-              keyboardType: TextInputType.emailAddress, // Teclado de email [cite: 106]
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: "Email",
                 border: OutlineInputBorder(),
@@ -70,10 +120,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 20),
 
-            // 3. Campo de Senha [cite: 107]
             TextField(
               controller: _senhaController,
-              obscureText: true, // Caracteres não visíveis [cite: 107]
+              obscureText: true,
               decoration: InputDecoration(
                 labelText: "Senha",
                 border: OutlineInputBorder(),
@@ -81,7 +130,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 40),
 
-            // 4. Botão Entrar [cite: 115]
             ElevatedButton(
               onPressed: _fazerLogin,
               child: Text(
@@ -89,19 +137,47 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(fontSize: 20, color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.amber, // Cor amarela como na imagem [cite: 115]
-                minimumSize: Size(double.infinity, 50), // Largura total
+                backgroundColor: Colors.amber, 
+                minimumSize: Size(double.infinity, 50), 
               ),
             ),
             
             SizedBox(height: 20),
             
-            // 5. Botão Cadastrar conta / Recuperar senha [cite: 108, 110]
             TextButton(
-              onPressed: () {
-                print("Navegar para Cadastro de Usuário ou Recuperar Senha.");
+              onPressed: () async {
+                await showDialog(
+                  context: context, 
+                  builder: (context) => AlertDialog(
+                    title: const Text("Opções de Conta"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context, 
+                              MaterialPageRoute(
+                                builder: (context) => const CadastroUsuarioScreen(modo: ModoAutenticacao.cadastro)
+                              )
+                            );
+                          }, 
+                          child: const Text("Cadastrar Nova Conta")
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            await _iniciarRecuperacaoSenha(context);
+                          }, 
+                          child: const Text("Recuperar Senha")
+                        )
+                      ],
+                    ),
+                  )
+                );
               },
-              child: Text("Cadastrar conta / Recuperar senha"),
+              child: Text("Gerenciar conta"),
             ),
           ],
         ),
